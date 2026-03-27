@@ -1,0 +1,578 @@
+import React, { useState, useMemo } from 'react';
+import { Calendar, Clock, Search, Briefcase, Sparkles, LayoutList, CalendarX, Users, AlertCircle, ChevronDown } from 'lucide-react';
+
+// ข้อมูลทั้งหมด (อัปเดตล่าสุด 26/03/2026)
+const initialData = [
+  // 03/02/2026
+  { id: 1, date: '03/02/2026', name: 'แบงค์', hours: 3, task: 'เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้ + ประชุมแผนงาน', type: 'OT' },
+  { id: 2, date: '03/02/2026', name: 'นักรบ', hours: 2, task: 'Y1974 + เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้', type: 'OT' },
+  { id: 3, date: '03/02/2026', name: 'Armin', hours: 2, task: 'เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้', type: 'OT' },
+  { id: 4, date: '03/02/2026', name: 'น้องกาย', hours: 2, task: 'เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้', type: 'OT' },
+  { id: 5, date: '03/02/2026', name: 'พี่แมน', hours: 2, task: 'เตรียมเครื่องติดตั้ง + เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้', type: 'OT' },
+  { id: 6, date: '03/02/2026', name: 'น้องบอม', hours: 2, task: 'PROSODA : (2) + 9CN : (2)', type: 'OT' },
+  
+  // 04/02/2026
+  { id: 7, date: '04/02/2026', name: 'น้องบอม', hours: 0, task: 'ลาป่วย', type: 'Leave' },
+
+  // 05/02/2026
+  { id: 8, date: '05/02/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + ลงข้อมูลในชีทและสรุปลงกลุ่ม', type: 'OT' },
+  { id: 9, date: '05/02/2026', name: 'นักรบ', hours: 2, task: '07S : (1) + U5 : (1) + Y1974 : (1)', type: 'OT' },
+  { id: 10, date: '05/02/2026', name: 'Armin', hours: 2, task: 'New Work S9C : (1)', type: 'OT' },
+  { id: 11, date: '05/02/2026', name: 'น้องกาย', hours: 2, task: 'New Work เคลียร์เครื่องพี่นัท', type: 'OT' },
+  { id: 12, date: '05/02/2026', name: 'พี่แมน', hours: 2, task: 'เตรียมเครื่องติดตั้ง + แพ็คออเดอร์ที่ค้าง', type: 'OT' },
+  { id: 13, date: '05/02/2026', name: 'น้องบอม', hours: 2, task: 'FE301 : (1) + P3B : (1)', type: 'OT' },
+
+  // 09/02/2026
+  { id: 14, date: '09/02/2026', name: 'น้องกาย', hours: 0, task: 'ลากิจบ่าย', type: 'Leave' },
+
+  // 10/02/2026
+  { id: 15, date: '10/02/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + เขียนใบสั่งสินค้า', type: 'OT' },
+  { id: 16, date: '10/02/2026', name: 'นักรบ', hours: 2, task: 'S9C : (2) + FE151 : (1) + FE301 : (2)', type: 'OT' },
+  { id: 17, date: '10/02/2026', name: 'Armin', hours: 2, task: 'PROSODA : (2) + CHECK STOCK สินค้าสิ้นเปลือง', type: 'OT' },
+  { id: 18, date: '10/02/2026', name: 'พี่แมน', hours: 2, task: 'เตรียมเครื่องติดตั้ง + แพ็คออเดอร์ที่ค้าง', type: 'OT' },
+  { id: 19, date: '10/02/2026', name: 'น้องบอม', hours: 2, task: '07S : (1) + FE301 : (2)', type: 'OT' },
+
+  // 11/02/2026
+  { id: 20, date: '11/02/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + เขียนใบสั่งสินค้า + ทำรายงานเคลมโรงงาน', type: 'OT' },
+  { id: 21, date: '11/02/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 22, date: '11/02/2026', name: 'น้องกาย', hours: 2, task: 'PROSODA : (1) + U5 : (1)', type: 'OT' },
+  { id: 23, date: '11/02/2026', name: 'น้องบอม', hours: 0, task: 'ลากิจ 1 ชม (เข้างาน 9:00 น.)', type: 'Leave' },
+  { id: 24, date: '11/02/2026', name: 'พี่แมน', hours: 0, task: 'ลาป่วย', type: 'Leave' },
+  { id: 25, date: '11/02/2026', name: 'พี่ท็อป', hours: 0, task: 'ลากิจ', type: 'Leave' },
+
+  // 18/02/2026
+  { id: 26, date: '18/02/2026', name: 'น้องบอม', hours: 0, task: 'ลาป่วย', type: 'Leave' },
+  { id: 27, date: '18/02/2026', name: 'พี่ท็อป', hours: 0, task: 'ลากิจ', type: 'Leave' },
+  { id: 28, date: '18/02/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + ทำเช็คลิสต์โมดิฟาย', type: 'OT' },
+  { id: 29, date: '18/02/2026', name: 'นักรบ', hours: 2, task: 'RO-G600 : (1) + เตรียมสินค้าลงสาขาตรัง', type: 'OT' },
+  { id: 30, date: '18/02/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 31, date: '18/02/2026', name: 'น้องกาย', hours: 2, task: 'เตรียมสินค้าลงสาขาตรัง', type: 'OT' },
+  { id: 32, date: '18/02/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+
+  // 19/02/2026
+  { id: 33, date: '19/02/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + ทำเช็คลิสต์โมดิฟาย', type: 'OT' },
+  { id: 34, date: '19/02/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 35, date: '19/02/2026', name: 'น้องกาย', hours: 2, task: 'เตรียมสินค้าลงสาขาตรัง + เตรียมเครื่องพรีเซนต์', type: 'OT' },
+  { id: 36, date: '19/02/2026', name: 'น้องบอม', hours: 2, task: 'CHECK 13F : (3)', type: 'OT' },
+
+  // 20/02/2026
+  { id: 37, date: '20/02/2026', name: 'น้องบอม', hours: 0, task: 'ลากิจ 1 ชม', type: 'Leave' },
+
+  // 23/02/2026
+  { id: 38, date: '23/02/2026', name: 'แบงค์', hours: 0, task: 'ลาป่วย', type: 'Leave' },
+
+  // 24/02/2026
+  { id: 39, date: '24/02/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + ทำเช็คลิสต์โมดิฟาย', type: 'OT' },
+  { id: 40, date: '24/02/2026', name: 'นักรบ', hours: 2, task: 'เตรียมสินค้าลงสาขาตรัง', type: 'OT' },
+  { id: 41, date: '24/02/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 42, date: '24/02/2026', name: 'น้องกาย', hours: 2, task: 'เตรียมสินค้าลงสาขาตรัง', type: 'OT' },
+  { id: 43, date: '24/02/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+  { id: 44, date: '24/02/2026', name: 'น้องบอม', hours: 2, task: 'CHECK 45F', type: 'OT' },
+  { id: 45, date: '24/02/2026', name: 'น้องบอม', hours: 0, task: 'เข้างานสาย 10 นาที (วันฝนตก)', type: 'Leave' },
+
+  // 25/02/2026
+  { id: 46, date: '25/02/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + ทำเนื้อหาสำหรับสอนการออกใบลาเบลไปรษณีย์', type: 'OT' },
+  { id: 47, date: '25/02/2026', name: 'นักรบ', hours: 2, task: 'เตรียมสินค้าลงสาขาตรัง', type: 'OT' },
+  { id: 48, date: '25/02/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 49, date: '25/02/2026', name: 'น้องกาย', hours: 2, task: 'เตรียมสินค้าลงสาขาตรัง', type: 'OT' },
+  { id: 50, date: '25/02/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+  { id: 51, date: '25/02/2026', name: 'น้องบอม', hours: 2, task: 'CHECK 45F', type: 'OT' },
+
+  // 26/02/2026
+  { id: 52, date: '26/02/2026', name: 'แบงค์', hours: 1, task: 'ตรวจสอบงานภายในทีม + ลงรูปอัพเดตพื้นที่แต่ละบ้าน', type: 'OT' },
+  { id: 53, date: '26/02/2026', name: 'นักรบ', hours: 1, task: 'เตรียมสินค้าลงสาขาตรัง', type: 'OT' },
+  { id: 54, date: '26/02/2026', name: 'Armin', hours: 1, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 55, date: '26/02/2026', name: 'น้องกาย', hours: 1, task: 'เตรียมสินค้าลงสาขาตรัง', type: 'OT' },
+  { id: 56, date: '26/02/2026', name: 'พี่แมน', hours: 1, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+  { id: 57, date: '26/02/2026', name: 'น้องบอม', hours: 1, task: 'CHECK 45F + CHECK 65S : (1)', type: 'OT' },
+
+  // 02/03/2026
+  { id: 58, date: '02/03/2026', name: 'น้องกาย', hours: 0, task: 'ลากิจ', type: 'Leave' },
+  { id: 59, date: '02/03/2026', name: 'พี่แมน', hours: 0, task: 'ลากิจ', type: 'Leave' },
+
+  // 03/03/2026
+  { id: 60, date: '03/03/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + CHECK LIST MODIFY + CHECK SM MODIFY&PACK', type: 'OT' },
+  { id: 61, date: '03/03/2026', name: 'นักรบ', hours: 2, task: 'P3B : (1) + CHECK STOCK สินค้าสิ้นเปลือง', type: 'OT' },
+  { id: 62, date: '03/03/2026', name: 'น้องกาย', hours: 2, task: 'CHECK BLENDER : (1) + CHECK 20AF : (1) + CHECK 38F : (1)', type: 'OT' },
+  { id: 63, date: '03/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+  { id: 64, date: '03/03/2026', name: 'น้องบอม', hours: 2, task: 'CHECK 120F : (1) + 07S : (2)', type: 'OT' },
+
+  // 04/03/2026
+  { id: 65, date: '04/03/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + CHECK LIST MODIFY + CHECK SM MODIFY&PACK', type: 'OT' },
+  { id: 66, date: '04/03/2026', name: 'นักรบ', hours: 2, task: 'FE301 : (1) + เตรียมเครื่องลงสาขาตรัง', type: 'OT' },
+  { id: 67, date: '04/03/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 68, date: '04/03/2026', name: 'น้องกาย', hours: 2, task: 'FE801 : (2) + CHECK SM MODIFY', type: 'OT' },
+  { id: 69, date: '04/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+  { id: 70, date: '04/03/2026', name: 'น้องบอม', hours: 2, task: '07S : (2) + CHECK 15AF : (8) + CHECK SM PACK', type: 'OT' },
+
+  // 05/03/2026
+  { id: 71, date: '05/03/2026', name: 'น้องบอม', hours: 0, task: 'ลาป่วย (ท้องเสีย)', type: 'Leave' },
+  { id: 72, date: '05/03/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + CHECK LIST MODIFY', type: 'OT' },
+  { id: 73, date: '05/03/2026', name: 'นักรบ', hours: 2, task: 'FE801 : (1) + เตรียมเครื่องติดตั้ง', type: 'OT' },
+  { id: 74, date: '05/03/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 75, date: '05/03/2026', name: 'น้องกาย', hours: 2, task: 'เตรียมเครื่องติดตั้ง + S72C : (1)', type: 'OT' },
+  { id: 76, date: '05/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+
+  // 06/03/2026
+  { id: 77, date: '06/03/2026', name: 'นักรบ', hours: 0, task: 'ลากิจ', type: 'Leave' },
+
+  // 11/03/2026 (กู้คืนข้อมูลที่ตกหล่น)
+  { id: 78, date: '11/03/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + ชี้แจงเนื้อหาพรีเซนต์', type: 'OT' },
+  { id: 79, date: '11/03/2026', name: 'นักรบ', hours: 2, task: 'M7A : (1) + P3B : (1)', type: 'OT' },
+  { id: 80, date: '11/03/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 81, date: '11/03/2026', name: 'น้องกาย', hours: 2, task: '20AF : (2) + P3B : (1) + CHECK STOCK สินค้าสิ้นเปลือง', type: 'OT' },
+  { id: 82, date: '11/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+  { id: 83, date: '11/03/2026', name: 'น้องบอม', hours: 2, task: 'S9C : (2)', type: 'OT' },
+
+  // 12/03/2026
+  { id: 84, date: '12/03/2026', name: 'แบงค์', hours: 0, task: 'ลากิจ', type: 'Leave' },
+  { id: 85, date: '12/03/2026', name: 'พี่แมน', hours: 0, task: 'ลาป่วย (ท้องเสีย)', type: 'Leave' },
+  { id: 86, date: '12/03/2026', name: 'นักรบ', hours: 2, task: 'S9C=1, P3B=1, เตรียมเครื่องพรีเซนต์', type: 'OT' },
+  { id: 87, date: '12/03/2026', name: 'น้องกาย', hours: 2, task: 'FE301=2 , 07S=1, เตรียมเครื่องพรีเซนต์', type: 'OT' },
+  { id: 88, date: '12/03/2026', name: 'น้องบอม', hours: 2, task: 'เคลียร์ออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+  { id: 89, date: '12/03/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+
+  // 13/03/2026
+  { id: 90, date: '13/03/2026', name: 'แบงค์', hours: 0, task: 'ลากิจ', type: 'Leave' },
+  { id: 91, date: '13/03/2026', name: 'น้องบอม', hours: 0, task: 'ขาดงาน', type: 'Leave' },
+  { id: 92, date: '13/03/2026', name: 'Armin', hours: 3, task: 'เก็บของงานห่วง', type: 'OT' },
+
+  // 14/03/2026
+  { id: 93, date: '14/03/2026', name: 'แบงค์', hours: 0, task: 'ลากิจ', type: 'Leave' },
+
+  // 16/03/2026
+  { id: 94, date: '16/03/2026', name: 'แบงค์', hours: 0, task: 'ลากิจ', type: 'Leave' },
+  { id: 95, date: '16/03/2026', name: 'พี่แมน', hours: 0, task: 'ลากิจ', type: 'Leave' },
+
+  // 17/03/2026
+  { id: 96, date: '17/03/2026', name: 'น้องบอม', hours: 0, task: 'ลาออก', type: 'Leave' },
+  { id: 97, date: '17/03/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + ทำ CHECK LIST MODIFY + เตรียมเครื่องพรีเซนต์', type: 'OT' },
+  { id: 98, date: '17/03/2026', name: 'Armin', hours: 2, task: 'ซ่อมเครื่อง', type: 'OT' },
+  { id: 99, date: '17/03/2026', name: 'น้องกาย', hours: 2, task: 'เตรียมเครื่องพรีเซนต์ + 20AF : (2) + BLENDER : (2) + CHECK STOCK + เตรียมเครื่องพรีเซนต์', type: 'OT' },
+  { id: 100, date: '17/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+
+  // 18/03/2026
+  { id: 101, date: '18/03/2026', name: 'Armin', hours: 2, task: 'ออกไปข้างกับเบสท์', type: 'OT' },
+
+  // 19/03/2026
+  { id: 102, date: '19/03/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + ทำ CHECK LIST MODIFY', type: 'OT' },
+  { id: 103, date: '19/03/2026', name: 'นักรบ', hours: 2, task: 'RO-G600 : (2)', type: 'OT' },
+  { id: 104, date: '19/03/2026', name: 'น้องกาย', hours: 2, task: 'NEW WORK S9C : (1)', type: 'OT' },
+  { id: 105, date: '19/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+
+  // 25/03/2026
+  { id: 106, date: '25/03/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + ตรวจสินค้าที่จะส่งไปสาขาตรัง', type: 'OT' },
+  { id: 107, date: '25/03/2026', name: 'นักรบ', hours: 2, task: 'เตรียมสินค้าส่งไปสาขาตรัง + 20AF : (2) + FE301 : (1) + CHECK STOCK', type: 'OT' },
+  { id: 108, date: '25/03/2026', name: 'Armin', hours: 2, task: 'เตรียมสินค้าส่งไปสาขาตรัง + CHECK STOCK', type: 'OT' },
+  { id: 109, date: '25/03/2026', name: 'น้องกาย', hours: 2, task: 'เตรียมสินค้าส่งไปสาขาตรัง + CHECK STOCK', type: 'OT' },
+  { id: 110, date: '25/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+
+  // 26/03/2026
+  { id: 111, date: '26/03/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + สรุปเนื้อหาที่คุยงานระหว่างทีมแพ็คและทีมขาย', type: 'OT' },
+  { id: 112, date: '26/03/2026', name: 'นักรบ', hours: 2, task: 'PROSODA : (1) + FE301 : (1) + CHECK STOCK + U5 : (1)', type: 'OT' },
+  { id: 113, date: '26/03/2026', name: 'Armin', hours: 2, task: '15AF : (1) + CHECK STOCK + RO-G600 : (2)', type: 'OT' },
+  { id: 114, date: '26/03/2026', name: 'น้องกาย', hours: 2, task: '65S : (2) + CHECK STOCK + FE301 : (1)', type: 'OT' },
+  { id: 115, date: '26/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+
+  // 27/03/2026 (แก้ไขข้อมูลน้องกาย)
+  { id: 116, date: '27/03/2026', name: 'นักรบ', hours: 0, task: 'ลากิจ', type: 'Leave' },
+  { id: 117, date: '27/03/2026', name: 'น้องกาย', hours: 0, task: 'ลาป่วย', type: 'Leave' }
+];
+
+// ปรับสีให้ "ตรงกับรูปภาพ" 
+const getNameStyles = (name) => {
+  switch (name) {
+    case 'แบงค์': return { bg: 'bg-[#FFEBA5]', text: 'text-[#714B15]', border: 'border-transparent', ring: 'ring-amber-500/20' };
+    case 'นักรบ': return { bg: 'bg-[#B91C1C]', text: 'text-white', border: 'border-transparent', ring: 'ring-red-500/20' };
+    case 'Armin': return { bg: 'bg-[#E9D5FF]', text: 'text-[#6B21A8]', border: 'border-transparent', ring: 'ring-purple-500/20' };
+    case 'น้องกาย': return { bg: 'bg-[#854D0E]', text: 'text-white', border: 'border-transparent', ring: 'ring-orange-800/20' };
+    case 'พี่แมน': return { bg: 'bg-[#D9F99D]', text: 'text-[#365314]', border: 'border-transparent', ring: 'ring-lime-500/20' };
+    case 'น้องบอม': return { bg: 'bg-[#134E4A]', text: 'text-white', border: 'border-transparent', ring: 'ring-teal-800/20' };
+    case 'พี่ท็อป': return { bg: 'bg-[#4F46E5]', text: 'text-white', border: 'border-transparent', ring: 'ring-indigo-500/20' };
+    default: return { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200', ring: 'ring-slate-500/20' };
+  }
+};
+
+const getAvatarGradient = (name) => {
+    switch (name) {
+    case 'แบงค์': return 'from-amber-400 to-orange-500';
+    case 'นักรบ': return 'from-red-500 to-rose-600';
+    case 'Armin': return 'from-violet-400 to-purple-500';
+    case 'น้องกาย': return 'from-orange-700 to-amber-800';
+    case 'พี่แมน': return 'from-lime-400 to-green-600';
+    case 'น้องบอม': return 'from-teal-600 to-emerald-800';
+    case 'พี่ท็อป': return 'from-indigo-500 to-blue-700';
+    default: return 'from-slate-400 to-slate-600';
+  }
+}
+
+const monthNamesTh = {
+  '01': 'มกราคม', '02': 'กุมภาพันธ์', '03': 'มีนาคม', '04': 'เมษายน',
+  '05': 'พฤษภาคม', '06': 'มิถุนายน', '07': 'กรกฎาคม', '08': 'สิงหาคม',
+  '09': 'กันยายน', '10': 'ตุลาคม', '11': 'พฤศจิกายน', '12': 'ธันวาคม'
+};
+
+export default function App() {
+  const [filterName, setFilterName] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('all'); // 'all', 'ot', 'leave'
+  
+  // สร้างรายการเดือนจากข้อมูล (เรียงจากใหม่ไปเก่า)
+  const uniqueMonths = useMemo(() => {
+    const months = new Set(initialData.map(item => {
+        const parts = item.date.split('/');
+        return `${parts[1]}/${parts[2]}`; // MM/YYYY
+    }));
+    const sorted = Array.from(months).sort((a, b) => {
+         const [mA, yA] = a.split('/');
+         const [mB, yB] = b.split('/');
+         if (yA !== yB) return yB - yA;
+         return mB - mA;
+    });
+    return ['All', ...sorted];
+  }, []);
+
+  const [activeMonth, setActiveMonth] = useState(uniqueMonths.length > 1 ? uniqueMonths[1] : 'All');
+
+  // จัดการซ่อนพนักงานที่ลาออกตามเดือนที่เลือก
+  const uniqueNames = useMemo(() => {
+    const namesSet = new Set(initialData.map(item => item.name));
+    let names = ['All', ...Array.from(namesSet)];
+
+    if (activeMonth !== 'All') {
+        const [m, y] = activeMonth.split('/');
+        const month = parseInt(m);
+        const year = parseInt(y);
+
+        // พี่ท็อป ลาออก มีนาคม 2026
+        if (year > 2026 || (year === 2026 && month >= 3)) {
+            names = names.filter(n => n !== 'พี่ท็อป');
+        }
+        // น้องบอม ลาออก 17 มีนาคม 2026 (ซ่อนตั้งแต่เมษายน)
+        if (year > 2026 || (year === 2026 && month >= 4)) {
+            names = names.filter(n => n !== 'น้องบอม');
+        }
+    }
+    return names;
+  }, [activeMonth]);
+
+  const handleMonthChange = (e) => {
+      const newMonth = e.target.value;
+      setActiveMonth(newMonth);
+      
+      // Reset filterName if looking at a resigned person in a future month
+      if (newMonth !== 'All') {
+          const [m, y] = newMonth.split('/');
+          const month = parseInt(m);
+          const year = parseInt(y);
+          
+          if (filterName === 'พี่ท็อป' && (year > 2026 || (year === 2026 && month >= 3))) {
+              setFilterName('All');
+          }
+          if (filterName === 'น้องบอม' && (year > 2026 || (year === 2026 && month >= 4))) {
+              setFilterName('All');
+          }
+      }
+  };
+
+  const formatMonth = (monthStr) => {
+      if (monthStr === 'All') return 'ดูทุกเดือน';
+      const [m, y] = monthStr.split('/');
+      return `${monthNamesTh[m]} ${y}`;
+  }
+
+  const filteredData = useMemo(() => {
+    return initialData.filter(item => {
+      // 1. Filter by Name
+      const matchesName = filterName === 'All' || item.name === filterName;
+      
+      // 2. Filter by Search
+      const matchesSearch = item.task.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            item.date.includes(searchTerm);
+      
+      // 3. Filter by Tab (Category)
+      let matchesTab = true;
+      if (activeTab === 'ot') matchesTab = item.hours > 0;
+      else if (activeTab === 'leave') matchesTab = item.hours === 0;
+
+      // 4. Filter by Month
+      const matchesMonth = activeMonth === 'All' || item.date.endsWith(activeMonth);
+
+      return matchesName && matchesSearch && matchesTab && matchesMonth;
+    });
+  }, [filterName, searchTerm, activeTab, activeMonth]);
+
+  const stats = useMemo(() => {
+    // Stats สะท้อนตาม "เดือน" และ "บุคคล" ที่เลือก แต่รวมทุกหมวดหมู่ (OT + ลา)
+    const dataForStats = initialData.filter(item => {
+        const matchesName = filterName === 'All' || item.name === filterName;
+        const matchesMonth = activeMonth === 'All' || item.date.endsWith(activeMonth);
+        return matchesName && matchesMonth;
+    });
+
+    const totalHours = dataForStats.reduce((acc, curr) => acc + curr.hours, 0);
+    const otDays = dataForStats.filter(i => i.hours > 0).length;
+    const leaveDays = dataForStats.filter(i => i.hours === 0).length;
+    return { totalHours, otDays, leaveDays };
+  }, [filterName, activeMonth]);
+
+  return (
+    <div className="min-h-screen bg-slate-50/50 font-sans text-slate-800 pb-12">
+      
+      {/* Hero Header */}
+      <header className="bg-gradient-to-r from-[#1e3a8a] via-[#1d4ed8] to-[#3b82f6] text-white shadow-lg pb-20">
+        <div className="max-w-6xl mx-auto px-6 py-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                            <Briefcase className="w-6 h-6 text-white" />
+                        </div>
+                        <span className="bg-white/10 px-3 py-1 rounded-full text-xs font-medium tracking-wide uppercase border border-white/10 backdrop-blur-sm">
+                            Team Pack & Modify
+                        </span>
+                    </div>
+                    <h1 className="text-3xl font-bold text-white tracking-tight">ระบบบันทึก OT</h1>
+                    <p className="text-blue-100 mt-1 text-sm font-light">ตรวจสอบชั่วโมงการทำงานและภาระงานของทีม</p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                    {/* Month Filter */}
+                    <div className="relative w-full sm:w-auto">
+                        <select 
+                            value={activeMonth}
+                            onChange={handleMonthChange}
+                            className="appearance-none pl-4 pr-10 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/20 w-full sm:w-48 transition-all cursor-pointer"
+                        >
+                            {uniqueMonths.map(month => (
+                                <option key={month} value={month} className="text-slate-800">
+                                    {formatMonth(month)}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white">
+                            <ChevronDown className="h-4 w-4" />
+                        </div>
+                    </div>
+
+                    {/* Search */}
+                    <div className="relative w-full sm:w-auto">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <Search className="h-4 w-4 text-blue-200" />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="ค้นหางาน, วันที่..."
+                            className="pl-10 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/20 w-full md:w-72 transition-all"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-6 -mt-12 relative z-10">
+        
+        {/* Stats Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+             {/* Total Hours Card */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div className="relative">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2.5 bg-blue-100 rounded-lg text-blue-600">
+                            <Clock className="w-5 h-5" />
+                        </div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">ชั่วโมง OT รวม</p>
+                    </div>
+                    <div className="flex items-baseline gap-2">
+                        <h2 className="text-4xl font-bold text-slate-800">{stats.totalHours}</h2>
+                        <span className="text-sm font-medium text-slate-400">ชั่วโมง</span>
+                    </div>
+                </div>
+            </div>
+            
+            {/* OT Count Card */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div className="relative">
+                    <div className="flex items-center gap-3 mb-4">
+                         <div className="p-2.5 bg-emerald-100 rounded-lg text-emerald-600">
+                            <Briefcase className="w-5 h-5" />
+                        </div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">จำนวนรายการทำงาน</p>
+                    </div>
+                     <div className="flex items-baseline gap-2">
+                        <h2 className="text-4xl font-bold text-slate-800">{stats.otDays}</h2>
+                        <span className="text-sm font-medium text-slate-400">รายการ</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Leave Count Card */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div className="relative">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2.5 bg-amber-100 rounded-lg text-amber-600">
+                            <AlertCircle className="w-5 h-5" />
+                        </div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">ลากิจ / ลาป่วย</p>
+                    </div>
+                     <div className="flex items-baseline gap-2">
+                        <h2 className="text-4xl font-bold text-slate-800">{stats.leaveDays}</h2>
+                        <span className="text-sm font-medium text-slate-400">รายการ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="flex flex-col lg:flex-row gap-8">
+            
+            {/* Sidebar Filters */}
+            <div className="lg:w-64 flex-shrink-0">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 sticky top-24">
+                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <Users className="w-4 h-4 text-slate-400" /> สมาชิกในทีม
+                    </h3>
+                    <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+                        {uniqueNames.map(name => (
+                            <button
+                                key={name}
+                                onClick={() => setFilterName(name)}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap lg:whitespace-normal text-left
+                                    ${filterName === name 
+                                        ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
+                                        : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`}
+                            >
+                                <div className={`w-2 h-2 rounded-full ${name === 'All' ? 'bg-white/50' : (filterName === name ? 'bg-white' : 'bg-slate-400')}`}></div>
+                                {name === 'All' ? 'แสดงทั้งหมด' : name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Main List */}
+            <div className="flex-1">
+                 
+                 {/* Category Tabs */}
+                 <div className="flex items-center gap-2 mb-4 bg-white p-1.5 rounded-xl border border-slate-200 w-fit">
+                    <button
+                        onClick={() => setActiveTab('all')}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                            activeTab === 'all' 
+                            ? 'bg-slate-800 text-white shadow-sm' 
+                            : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'
+                        }`}
+                    >
+                        <LayoutList className="w-4 h-4" />
+                        ทั้งหมด
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('ot')}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                            activeTab === 'ot' 
+                            ? 'bg-emerald-600 text-white shadow-sm' 
+                            : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'
+                        }`}
+                    >
+                        <Briefcase className="w-4 h-4" />
+                        รายการ OT
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('leave')}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                            activeTab === 'leave' 
+                            ? 'bg-amber-500 text-white shadow-sm' 
+                            : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'
+                        }`}
+                    >
+                        <CalendarX className="w-4 h-4" />
+                        ประวัติการลา
+                    </button>
+                 </div>
+
+                 <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                     {/* Table Header (Desktop) */}
+                    <div className="hidden md:grid grid-cols-12 gap-6 px-6 py-4 bg-slate-50/80 border-b border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                        <div className="col-span-3">วันที่ / พนักงาน</div>
+                        <div className="col-span-2 text-center">สถานะ</div>
+                        <div className="col-span-7">รายละเอียดงาน</div>
+                    </div>
+
+                    {/* Items */}
+                    <div className="divide-y divide-slate-100">
+                        {filteredData.length > 0 ? (
+                            filteredData.map((item) => {
+                                const styles = getNameStyles(item.name);
+                                return (
+                                <div key={item.id} className="group hover:bg-slate-50/50 transition-all duration-200 p-5 md:px-6 md:py-5">
+                                    <div className="flex flex-col md:grid md:grid-cols-12 md:gap-6 items-start md:items-center">
+                                        
+                                        {/* Date & Name */}
+                                        <div className="w-full md:col-span-3 flex items-center gap-4 mb-3 md:mb-0">
+                                            <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${getAvatarGradient(item.name)} flex items-center justify-center text-white font-bold shadow-sm flex-shrink-0`}>
+                                                {item.name.substring(0, 1)}
+                                            </div>
+                                            <div>
+                                                <div className={`inline-block px-3 py-1 rounded-md text-sm font-bold shadow-sm mb-1 ${styles.bg} ${styles.text}`}>
+                                                    {item.name}
+                                                </div>
+                                                <div className="text-xs text-slate-500 font-medium flex items-center gap-1">
+                                                    <Calendar className="w-3 h-3" /> {item.date}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Status / Hours */}
+                                        <div className="w-full md:col-span-2 flex md:justify-center mb-3 md:mb-0">
+                                            {item.hours > 0 ? (
+                                                <span className="inline-flex items-center px-4 py-1.5 rounded-lg text-sm font-bold bg-[#134E4A] text-white shadow-sm">
+                                                    {item.hours} ชม.
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-400 border border-slate-200">
+                                                    {item.task.includes('เข้างานสาย') ? 'มาสาย' : 'ลา / หยุด'}
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Description */}
+                                        <div className="w-full md:col-span-7">
+                                             <div className="bg-slate-50 md:bg-transparent p-3 md:p-0 rounded-xl md:rounded-none border md:border-none border-slate-100">
+                                                <p className="text-sm text-slate-700 leading-relaxed font-medium">
+                                                    {item.task}
+                                                </p>
+                                             </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            )})
+                        ) : (
+                            <div className="py-20 flex flex-col items-center justify-center text-slate-400">
+                                <div className="bg-slate-50 p-4 rounded-full mb-4">
+                                    <Sparkles className="w-8 h-8 text-slate-300" />
+                                </div>
+                                <p className="text-lg font-medium text-slate-600">ไม่พบข้อมูลในหมวดนี้</p>
+                                <p className="text-sm text-slate-400">ลองเปลี่ยนหมวดหมู่ หรือเลือกพนักงานคนอื่นดูนะครับ</p>
+                            </div>
+                        )}
+                    </div>
+                 </div>
+                 
+                 <div className="mt-8 flex items-center justify-between text-xs text-slate-400 px-2">
+                     <p>© 2026 TEAM PACK & MODIFY</p>
+                     <p>อัปเดตข้อมูล: {formatMonth(activeMonth)}</p>
+                 </div>
+            </div>
+        </div>
+
+      </main>
+    </div>
+  );
+}
