@@ -32,13 +32,25 @@
     header{
       color:#fff;
       background:
-        radial-gradient(circle at top right, rgba(59,130,246,.28), transparent 30%),
-        radial-gradient(circle at top left, rgba(14,165,233,.18), transparent 30%),
-        linear-gradient(90deg, var(--blue-3), var(--blue-2), #3b82f6);
-      box-shadow:var(--shadow);
-      padding-bottom:72px;
+        radial-gradient(circle at 80% -20%, rgba(56, 189, 248, 0.3) 0%, transparent 40%),
+        radial-gradient(circle at 20% 120%, rgba(37, 99, 235, 0.4) 0%, transparent 50%),
+        linear-gradient(145deg, #0f172a 0%, #1e3a8a 100%);
+      box-shadow: 0 10px 30px -10px rgba(30, 58, 138, 0.5);
+      padding-bottom: 80px;
+      position: relative;
+      overflow: hidden;
     }
-    .header-inner{padding:32px 0}
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .header-inner{position:relative; z-index:1; padding:40px 0}
     .header-top{
       display:flex;
       justify-content:space-between;
@@ -47,28 +59,59 @@
       flex-wrap:wrap;
     }
     .badge{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:8px 14px;border-radius:999px;
-      background:rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.14);
-      font-size:12px;font-weight:700;letter-spacing:.02em;
-      backdrop-filter:blur(8px);
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 16px;border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      font-size:13px;font-weight:600;letter-spacing:.03em;
+      backdrop-filter:blur(12px);
+      color:#bae6fd;
+      margin-bottom:12px;
     }
-    .header-title{font-size:40px;line-height:1.1;margin:16px 0 8px;font-weight:800}
-    .header-sub{margin:0;color:#dbeafe;font-size:15px;line-height:1.7;max-width:740px}
-    .header-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .badge::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #38bdf8;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #38bdf8;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(56, 189, 248, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+    }
+    .header-title{
+      font-size:46px;line-height:1.1;margin:0 0 12px;font-weight:900;letter-spacing:-0.02em;
+      background: linear-gradient(to right, #ffffff 30%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .header-sub{margin:0;color:#94a3b8;font-size:16px;line-height:1.6;max-width:650px;font-weight:400;}
+    .header-actions{display:flex;gap:12px;flex-wrap:wrap; align-items:center;}
     .btn{
       border:none;cursor:pointer;border-radius:16px;padding:12px 16px;
-      font-weight:700;font-size:14px;transition:.2s ease;
+      font-weight:700;font-size:14px;transition:all .2s ease;
       display:inline-flex;align-items:center;gap:8px;
     }
-    .btn:hover{transform:translateY(-1px)}
-    .btn-share{background:#fff;color:#0f172a;box-shadow:var(--shadow)}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-share{
+      background:linear-gradient(135deg, #38bdf8, #2563eb);
+      color:#fff;
+      box-shadow:0 4px 15px rgba(37, 99, 235, 0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .btn-share:hover{
+      box-shadow:0 6px 20px rgba(37, 99, 235, 0.6);
+    }
     .update-pill{
       padding:12px 16px;border-radius:16px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.12);
-      color:#e2e8f0;font-size:14px;
+      background:rgba(15, 23, 42, 0.4);
+      border:1px solid rgba(255,255,255,.1);
+      color:#cbd5e1;font-size:14px;font-weight:500;
       backdrop-filter:blur(8px);
     }
 
@@ -192,7 +235,8 @@
       .layout{grid-template-columns:1fr}
     }
     @media (max-width: 768px){
-      .header-title{font-size:30px}
+      .header-title{font-size:32px}
+      .header-sub{font-size:14px}
       .stats{grid-template-columns:1fr}
       .table-head{display:none}
       .item-grid{grid-template-columns:1fr}
@@ -209,8 +253,8 @@
     <div class="container header-inner">
       <div class="header-top">
         <div>
-          <div class="badge">📦 เว็บสำหรับแชร์ข้อมูลทีม Pack & Modify</div>
-          <h1 class="header-title">ระบบบันทึก OT และประวัติการลา</h1>
+          <div class="badge">พื้นที่แชร์ข้อมูลทีม Pack & Modify</div>
+          <h1 class="header-title">OT TEAM PACK&MODIFY</h1>
           <p class="header-sub">ใช้ดูชั่วโมง OT รายละเอียดงาน ประวัติการลา และค้นหาข้อมูลย้อนหลังได้ในหน้าเดียว</p>
         </div>
         <div class="header-actions">
@@ -426,6 +470,19 @@
       { id: 115, date: '26/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
       { id: 116, date: '27/03/2026', name: 'นักรบ', hours: 0, task: 'ลากิจ', type: 'Leave' },
       { id: 117, date: '27/03/2026', name: 'น้องกาย', hours: 0, task: 'ลาป่วย', type: 'Leave' },
+      
+      // 01/04/2026
+      { id: 118, date: '01/04/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + สรุปเนื้อหาสำหรับประชุมกับทางสาขาตรัง', type: 'OT' },
+      { id: 119, date: '01/04/2026', name: 'นักรบ', hours: 2, task: 'BLENDER : (2) + U5 : (1) + CHECK STOCK', type: 'OT' },
+      { id: 120, date: '01/04/2026', name: 'Armin', hours: 2, task: 'U5 : (1) + 100XJ : (1) + CHECK STOCK', type: 'OT' },
+      { id: 121, date: '01/04/2026', name: 'น้องกาย', hours: 2, task: 'M7A : (1) + U5 : (1) + CHECK SM MODIFY', type: 'OT' },
+      { id: 122, date: '01/04/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้งและสินค้าส่งให้สาขาดอนเมือง', type: 'OT' },
+      
+      // 02/04/2026
+      { id: 123, date: '02/04/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + สรุปเนื้อหาสำหรับประชุมกับทางสาขาตรัง', type: 'OT' },
+      { id: 124, date: '02/04/2026', name: 'Armin', hours: 2, task: 'ไปติดตั้ง', type: 'OT' },
+      { id: 125, date: '02/04/2026', name: 'น้องกาย', hours: 2, task: 'NEW WORK 20AF : (2)', type: 'OT' },
+      { id: 126, date: '02/04/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' }
     ];
 
     const monthNamesTh = {
@@ -599,7 +656,22 @@
         return;
       }
       empty.style.display = 'none';
-      items.innerHTML = list.map(item => `
+      items.innerHTML = list.map(item => {
+        // จัดการ Badge ให้แสดงข้อความถูกต้องตามเงื่อนไข
+        let badgeHtml = '';
+        if (item.hours > 0) {
+            badgeHtml = `<span class="hours ot">${item.hours} ชม.</span>`;
+        } else {
+            let text = 'ลา / หยุด';
+            if (item.task.includes('เข้างานสาย')) text = 'มาสาย';
+            else if (item.task.includes('ขาดงาน')) text = 'ขาดงาน';
+            else if (item.task.includes('ลาออก')) text = 'ลาออก';
+            else if (item.task.includes('ลาป่วย')) text = 'ลาป่วย';
+            else if (item.task.includes('ลากิจ')) text = 'ลากิจ';
+            badgeHtml = `<span class="hours leave">${text}</span>`;
+        }
+
+        return `
         <div class="item">
           <div class="item-grid">
             <div class="person">
@@ -610,16 +682,12 @@
               </div>
             </div>
             <div class="status">
-              ${
-                item.hours > 0
-                  ? `<span class="hours ot">${item.hours} ชม.</span>`
-                  : `<span class="hours leave">${item.task.includes('เข้างานสาย') ? 'มาสาย' : 'ลา / หยุด'}</span>`
-              }
+              ${badgeHtml}
             </div>
             <div><div class="task">${escapeHtml(item.task)}</div></div>
           </div>
         </div>
-      `).join('');
+      `}).join('');
     }
 
     function escapeHtml(str){
