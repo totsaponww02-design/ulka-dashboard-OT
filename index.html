@@ -2,249 +2,290 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Ulka Dashboard OT</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts (Sarabun) -->
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <style>
-    :root{
-      --bg:#f8fafc;
-      --card:#ffffff;
-      --border:#e2e8f0;
-      --text:#0f172a;
-      --muted:#64748b;
-      --muted2:#94a3b8;
-      --blue:#2563eb;
-      --blue-2:#1d4ed8;
-      --blue-3:#1e3a8a;
-      --emerald:#059669;
-      --amber:#f59e0b;
-      --danger:#b91c1c;
-      --shadow:0 8px 24px rgba(15,23,42,.08);
-      --radius:20px;
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --border: #f1f5f9;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --primary: #2563eb;
+      --primary-bg: #eff6ff;
+      --success: #059669;
+      --success-bg: #ecfdf5;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+      --radius-card: 24px;
+      --radius-btn: 14px;
+      --radius-pill: 999px;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Thai","Helvetica Neue",Arial,sans-serif;
-      background:linear-gradient(180deg,#f8fafc 0%,#ffffff 45%,#f1f5f9 100%);
-      color:var(--text);
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      font-family: 'Sarabun', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
     }
-    .container{max-width:1200px;margin:0 auto;padding:0 24px}
-    header{
-      color:#fff;
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    
+    /* Hide Scrollbar for Horizontal scrolling */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* === Header === */
+    header {
+      color: #fff;
       background:
-        radial-gradient(circle at 80% -20%, rgba(56, 189, 248, 0.3) 0%, transparent 40%),
-        radial-gradient(circle at 20% 120%, rgba(37, 99, 235, 0.4) 0%, transparent 50%),
-        linear-gradient(145deg, #0f172a 0%, #1e3a8a 100%);
-      box-shadow: 0 10px 30px -10px rgba(30, 58, 138, 0.5);
-      padding-bottom: 80px;
+        radial-gradient(circle at 80% -20%, rgba(56, 189, 248, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 20% 120%, rgba(37, 99, 235, 0.2) 0%, transparent 50%),
+        linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      padding-bottom: 70px;
       position: relative;
       overflow: hidden;
     }
     header::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
                         linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 30px 30px;
-      opacity: 0.5;
-      pointer-events: none;
+      background-size: 24px 24px; opacity: 0.5; pointer-events: none;
     }
-    .header-inner{position:relative; z-index:1; padding:40px 0}
-    .header-top{
-      display:flex;
-      justify-content:space-between;
-      gap:24px;
-      align-items:flex-start;
-      flex-wrap:wrap;
+    .header-inner { position: relative; z-index: 1; padding: 36px 0; }
+    .header-top { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+    
+    .badge-top {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: var(--radius-pill);
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.1);
+      font-size: 13px; font-weight: 500; letter-spacing: .02em;
+      backdrop-filter: blur(8px); color: #e0f2fe; margin-bottom: 16px;
     }
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:6px 16px;border-radius:999px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-      font-size:13px;font-weight:600;letter-spacing:.03em;
-      backdrop-filter:blur(12px);
-      color:#bae6fd;
-      margin-bottom:12px;
+    .badge-top i { width: 14px; height: 14px; color: #38bdf8; }
+    
+    .header-title {
+      font-size: 36px; line-height: 1.2; margin: 0 0 8px; font-weight: 800;
+      background: linear-gradient(to right, #ffffff 40%, #93c5fd 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .badge::before {
-      content: '';
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background-color: #38bdf8;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #38bdf8;
-      animation: pulse 2s infinite;
+    .header-sub { margin: 0; color: #cbd5e1; font-size: 15px; font-weight: 400; max-width: 600px; line-height: 1.6; }
+    
+    .header-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .btn {
+      border: none; cursor: pointer; border-radius: var(--radius-pill); padding: 10px 18px;
+      font-weight: 600; font-size: 14px; transition: all .2s ease;
+      display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
     }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4); }
-      70% { box-shadow: 0 0 0 6px rgba(56, 189, 248, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
-    }
-    .header-title{
-      font-size:46px;line-height:1.1;margin:0 0 12px;font-weight:900;letter-spacing:-0.02em;
-      background: linear-gradient(to right, #ffffff 30%, #93c5fd 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    .header-sub{margin:0;color:#94a3b8;font-size:16px;line-height:1.6;max-width:650px;font-weight:400;}
-    .header-actions{display:flex;gap:12px;flex-wrap:wrap; align-items:center;}
-    .btn{
-      border:none;cursor:pointer;border-radius:16px;padding:12px 16px;
-      font-weight:700;font-size:14px;transition:all .2s ease;
-      display:inline-flex;align-items:center;gap:8px;
-    }
-    .btn:hover{transform:translateY(-2px)}
-    .btn-share{
-      background:linear-gradient(135deg, #38bdf8, #2563eb);
-      color:#fff;
-      box-shadow:0 4px 15px rgba(37, 99, 235, 0.4);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .btn-share:hover{
-      box-shadow:0 6px 20px rgba(37, 99, 235, 0.6);
-    }
-    .update-pill{
-      padding:12px 16px;border-radius:16px;
-      background:rgba(15, 23, 42, 0.4);
-      border:1px solid rgba(255,255,255,.1);
-      color:#cbd5e1;font-size:14px;font-weight:500;
-      backdrop-filter:blur(8px);
+    .btn:hover { transform: translateY(-2px); }
+    .btn-share { background: #fff; color: #0f172a; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+    .update-pill {
+      padding: 10px 16px; border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,.1);
+      color: #e2e8f0; font-size: 13px; font-weight: 500; backdrop-filter: blur(8px);
     }
 
-    main{margin-top:-48px;padding-bottom:48px}
-    .stats{
-      display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:28px;
+    /* === Main Content === */
+    main { margin-top: -45px; padding-bottom: 48px; position: relative; z-index: 10; }
+    
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+    
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-card); box-shadow: var(--shadow-soft);
+      transition: box-shadow 0.3s ease;
     }
-    .stat-card{
-      background:var(--card);border:1px solid var(--border);
-      border-radius:28px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden;
-    }
-    .stat-card::after{
-      content:"";position:absolute;top:-18px;right:-18px;width:96px;height:96px;border-radius:0 0 0 999px;opacity:.9;
-    }
-    .stat-card.blue::after{background:#eff6ff}
-    .stat-card.emerald::after{background:#ecfdf5}
-    .stat-card.amber::after{background:#fffbeb}
-    .stat-card.violet::after{background:#f5f3ff}
-    .stat-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;position:relative;z-index:1}
-    .icon-box{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:18px}
-    .icon-blue{background:#dbeafe}.icon-emerald{background:#d1fae5}.icon-amber{background:#fef3c7}.icon-violet{background:#ede9fe}
-    .stat-label{font-size:13px;color:var(--muted);font-weight:700}
-    .stat-value{display:flex;align-items:flex-end;gap:8px;position:relative;z-index:1}
-    .stat-value strong{font-size:36px;line-height:1;font-weight:800}
-    .stat-value span{font-size:14px;color:var(--muted2);padding-bottom:4px}
+    
+    .stat-card { padding: 20px 24px; }
+    .stat-card:hover { box-shadow: var(--shadow-hover); }
+    .stat-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+    .icon-box { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; }
+    .icon-box i { width: 20px; height: 20px; }
+    .icon-blue { background: var(--primary-bg); color: var(--primary); }
+    .icon-emerald { background: var(--success-bg); color: var(--success); }
+    .icon-amber { background: var(--warning-bg); color: var(--warning); }
+    .icon-violet { background: #f3e8ff; color: #7e22ce; }
+    
+    .stat-label { font-size: 14px; color: var(--text-muted); font-weight: 600; }
+    .stat-value { display: flex; align-items: baseline; gap: 6px; }
+    .stat-value strong { font-size: 28px; line-height: 1; font-weight: 700; color: var(--text-main); }
+    .stat-value span { font-size: 13px; color: var(--text-light); font-weight: 500; }
 
-    .layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px}
-    .card{
-      background:var(--card);border:1px solid var(--border);
-      border-radius:28px;box-shadow:var(--shadow);
+    /* === Layout === */
+    .layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 24px; }
+    
+    .sidebar .card { padding: 24px; }
+    .section-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 16px; font-weight: 700; color: var(--text-main); margin: 0 0 16px;
     }
-    .sidebar .card{padding:20px}
-    .section-title{
-      display:flex;align-items:center;gap:8px;
-      font-size:14px;font-weight:800;color:#334155;margin:0 0 16px;
+    .section-title i { width: 18px; height: 18px; }
+    
+    /* Form Elements */
+    .field { margin-bottom: 16px; }
+    .label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; color: var(--text-muted); }
+    .input, .select {
+      width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-btn);
+      background: #f8fafc; font-size: 14px; color: var(--text-main); outline: none;
+      font-family: inherit; transition: all 0.2s; font-weight: 500;
     }
-    .field{margin-bottom:16px}
-    .label{display:block;margin-bottom:8px;font-size:12px;font-weight:700;color:var(--muted)}
-    .input,.select{
-      width:100%;padding:13px 14px;border:1px solid var(--border);border-radius:16px;
-      background:#f8fafc;font-size:14px;color:#0f172a;outline:none;
+    .input:focus, .select:focus {
+      background: #fff; border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     }
-    .input:focus,.select:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
-    .member-list{display:flex;flex-wrap:wrap;gap:8px}
-    .member-btn{
-      border:none;cursor:pointer;border-radius:16px;padding:10px 12px;
-      font-size:14px;font-weight:700;background:#f1f5f9;color:#334155;
+    
+    /* === Member List (Cute Card Style) === */
+    .member-list { display: flex; flex-direction: column; gap: 4px; }
+    .member-btn {
+      border: none; background: transparent; padding: 12px 16px; border-radius: var(--radius-btn);
+      display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500;
+      color: var(--text-muted); cursor: pointer; transition: all 0.2s; font-family: inherit; text-align: left;
     }
-    .member-btn.active{background:var(--blue);color:#fff;box-shadow:0 8px 20px rgba(37,99,235,.25)}
-    .tip-card{background:#0f172a;color:#fff;padding:20px}
-    .tip-card p{margin:0;color:#cbd5e1;font-size:14px;line-height:1.7}
-
-    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-    .tab{
-      border:1px solid var(--border);background:#fff;color:#334155;cursor:pointer;
-      padding:11px 16px;border-radius:16px;font-size:14px;font-weight:800;display:inline-flex;gap:8px;align-items:center;
+    .member-btn .dot {
+      width: 6px; height: 6px; border-radius: 50%; background-color: #cbd5e1; transition: 0.2s; flex-shrink: 0;
     }
-    .tab.active-all{background:#0f172a;color:#fff;border-color:#0f172a}
-    .tab.active-ot{background:#059669;color:#fff;border-color:#059669}
-    .tab.active-leave{background:#f59e0b;color:#fff;border-color:#f59e0b}
-
-    .list-card{overflow:hidden}
-    .table-head{
-      display:grid;grid-template-columns:3fr 2fr 7fr;gap:16px;
-      background:#f8fafc;border-bottom:1px solid var(--border);
-      padding:16px 24px;font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;
+    .member-btn:hover { background-color: #f8fafc; color: var(--text-main); }
+    .member-btn:hover .dot { background-color: #94a3b8; }
+    
+    .member-btn.active {
+      background-color: var(--primary-bg); color: var(--primary); font-weight: 600;
     }
-    .items{display:block}
-    .item{padding:20px 24px;border-top:1px solid #f1f5f9}
-    .item:first-child{border-top:none}
-    .item:hover{background:#fafcff}
-    .item-grid{display:grid;grid-template-columns:3fr 2fr 7fr;gap:16px;align-items:center}
-    .person{display:flex;gap:12px;align-items:flex-start}
-    .avatar{
-      width:44px;height:44px;border-radius:16px;display:grid;place-items:center;color:#fff;font-weight:800;
-      box-shadow:0 8px 18px rgba(15,23,42,.16);flex:0 0 auto;
-    }
-    .person-name{
-      display:inline-flex;padding:6px 12px;border-radius:12px;font-size:14px;font-weight:800;margin-bottom:6px;
-    }
-    .date{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
-    .status{display:flex;justify-content:center}
-    .hours{
-      display:inline-flex;align-items:center;justify-content:center;
-      min-width:92px;padding:10px 14px;border-radius:12px;font-size:14px;font-weight:800;
-    }
-    .hours.ot{background:#134e4a;color:#fff}
-    .hours.leave{background:#fffbeb;color:#b45309;border:1px solid #fcd34d}
-    .task{
-      background:#f8fafc;border-radius:16px;padding:14px;font-size:14px;line-height:1.7;color:#334155;
-    }
-    .empty{
-      padding:72px 24px;text-align:center;color:var(--muted)
-    }
-    .empty .big{font-size:18px;font-weight:800;color:#475569;margin:8px 0}
-    .footer-note{
-      margin-top:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
-      color:#94a3b8;font-size:12px;padding:0 2px;
+    .member-btn.active .dot { 
+      background-color: var(--primary); 
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); 
     }
 
-    .grad-bank{background:linear-gradient(135deg,#f59e0b,#f97316)}
-    .grad-nakrob{background:linear-gradient(135deg,#ef4444,#e11d48)}
-    .grad-armin{background:linear-gradient(135deg,#a78bfa,#8b5cf6)}
-    .grad-guy{background:linear-gradient(135deg,#c2410c,#92400e)}
-    .grad-man{background:linear-gradient(135deg,#84cc16,#16a34a)}
-    .grad-bom{background:linear-gradient(135deg,#0f766e,#065f46)}
-    .grad-top{background:linear-gradient(135deg,#6366f1,#2563eb)}
-    .grad-default{background:linear-gradient(135deg,#94a3b8,#475569)}
+    /* === Tabs === */
+    .tabs { display: flex; gap: 12px; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 24px; padding-bottom: 4px; }
+    .tab {
+      border: 1px solid transparent; background: #f1f5f9; color: var(--text-muted); cursor: pointer;
+      padding: 12px 20px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600;
+      display: inline-flex; gap: 8px; align-items: center; transition: 0.2s; font-family: inherit; flex-shrink: 0;
+    }
+    .tab i { width: 16px; height: 16px; }
+    .tab:hover { background: #e2e8f0; color: var(--text-main); }
+    .tab.active-all { background: var(--text-main); color: #fff; }
+    .tab.active-ot { background: var(--success); color: #fff; }
+    .tab.active-leave { background: var(--warning); color: #fff; }
 
-    .tag-bank{background:#FFEBA5;color:#714B15}
-    .tag-nakrob{background:#B91C1C;color:#fff}
-    .tag-armin{background:#E9D5FF;color:#6B21A8}
-    .tag-guy{background:#854D0E;color:#fff}
-    .tag-man{background:#D9F99D;color:#365314}
-    .tag-bom{background:#134E4A;color:#fff}
-    .tag-top{background:#4F46E5;color:#fff}
-    .tag-default{background:#f1f5f9;color:#334155}
+    /* === Table/List === */
+    .list-card { overflow: hidden; padding: 4px; }
+    .table-head {
+      display: flex; align-items: center; gap: 20px;
+      padding: 16px 24px 12px; font-size: 13px; font-weight: 600; color: var(--text-muted);
+      border-bottom: 1px solid var(--border); margin-bottom: 8px;
+    }
+    .col-person { width: 35%; }
+    .col-status { width: 15%; text-align: center; }
+    .col-task { width: 50%; }
 
+    .item { 
+      padding: 16px 20px; margin: 0 8px 8px; border-radius: var(--radius-btn); 
+      background: #fff; transition: all 0.2s; border: 1px solid transparent;
+    }
+    .item:hover { background: #f8fafc; border-color: #e2e8f0; }
+    
+    .item-grid { display: flex; align-items: center; gap: 20px; }
+    .mobile-top-row { display: flex; align-items: center; width: 50%; gap: 20px; flex-shrink: 0; }
+    
+    .person { flex: 1; display: flex; gap: 14px; align-items: center; min-width: 0; }
+    
+    /* Avatar Badge */
+    .avatar {
+      padding: 0 16px; min-width: 85px; height: 40px; 
+      border-radius: var(--radius-pill); display: inline-flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 14px; flex: 0 0 auto;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 10px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.05); white-space: nowrap; letter-spacing: 0.02em;
+    }
+    
+    .date { font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; font-weight: 500; }
+    .date i { width: 14px; height: 14px; }
+    
+    .status { width: 15%; display: flex; justify-content: center; flex-shrink: 0; }
+    .badge-status {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 8px 16px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 600; white-space: nowrap;
+    }
+    .badge-status.ot { background: #ecfdf5; color: #059669; }
+    .badge-status.leave { background: #f1f5f9; color: #475569; }
+    .badge-status.warning { background: #fff7ed; color: #b45309; }
+    
+    .task-col { flex: 1; min-width: 0; }
+    .task { font-size: 15px; line-height: 1.6; color: var(--text-main); font-weight: 400; }
+    
+    /* Empty State */
+    .empty { padding: 60px 20px; text-align: center; color: var(--text-muted); }
+    .empty i { width: 44px; height: 44px; color: #cbd5e1; margin: 0 auto 16px; opacity: 0.7; }
+    .empty .big { font-size: 16px; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
+    .empty p { font-size: 14px; margin: 0; }
+
+    .footer-note {
+      margin-top: 24px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      color: var(--text-light); font-size: 13px; padding: 0 8px; font-weight: 500;
+    }
+
+    /* Gradients */
+    .grad-bank { background: linear-gradient(135deg, #fbbf24, #d97706); }
+    .grad-nakrob { background: linear-gradient(135deg, #f87171, #dc2626); }
+    .grad-armin { background: linear-gradient(135deg, #c084fc, #9333ea); }
+    .grad-guy { background: linear-gradient(135deg, #ea580c, #9a3412); }
+    .grad-man { background: linear-gradient(135deg, #a3e635, #65a30d); }
+    .grad-bom { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+    .grad-top { background: linear-gradient(135deg, #818cf8, #4f46e5); }
+    .grad-default { background: linear-gradient(135deg, #94a3b8, #475569); }
+
+    /* === RESPONSIVE === */
     @media (max-width: 1024px){
-      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .layout{grid-template-columns:1fr}
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .layout { grid-template-columns: 1fr; }
+      .member-list { flex-direction: row; overflow-x: auto; padding-bottom: 8px; gap: 8px; }
+      .member-btn { padding: 10px 16px; background: #f8fafc; white-space: nowrap; flex-shrink: 0; }
+      .member-btn .dot { display: none; }
+      .member-btn.active { background: var(--primary-bg); color: var(--primary); }
     }
+    
     @media (max-width: 768px){
-      .header-title{font-size:32px}
-      .header-sub{font-size:14px}
-      .stats{grid-template-columns:1fr}
-      .table-head{display:none}
-      .item-grid{grid-template-columns:1fr}
-      .status{justify-content:flex-start}
-      .task{padding:12px}
-      .container{padding:0 16px}
-      .header-inner{padding:24px 0}
-      .stat-card,.card{border-radius:24px}
+      .container { padding: 0 16px; }
+      header { padding-bottom: 60px; }
+      .header-inner { padding: 24px 0; }
+      .header-top { gap: 16px; }
+      .header-title { font-size: 28px; }
+      .header-sub { font-size: 14px; }
+      
+      .table-head { display: none; }
+      
+      .item { padding: 16px; border: 1px solid var(--border); margin-bottom: 12px; }
+      .item-grid { flex-direction: column; align-items: stretch; gap: 12px; }
+      .mobile-top-row { width: 100%; justify-content: space-between; gap: 12px; }
+      .person { flex: unset; gap: 12px; }
+      .avatar { min-width: 75px; height: 34px; font-size: 13px; padding: 0 12px; }
+      .date { font-size: 13px; }
+      
+      .status { width: auto; flex-shrink: 0; }
+      .badge-status { padding: 6px 12px; font-size: 12px; }
+      
+      .task-col { width: 100%; }
+      .task { 
+        background: #f8fafc; padding: 14px; 
+        border-radius: var(--radius-btn); 
+        border: 1px solid var(--border); font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -253,12 +294,12 @@
     <div class="container header-inner">
       <div class="header-top">
         <div>
-          <div class="badge">พื้นที่แชร์ข้อมูลทีม Pack & Modify</div>
+          <div class="badge-top"><i data-lucide="activity"></i> พื้นที่แชร์ข้อมูลทีม</div>
           <h1 class="header-title">OT TEAM PACK&MODIFY</h1>
-          <p class="header-sub">ใช้ดูชั่วโมง OT รายละเอียดงาน ประวัติการลา และค้นหาข้อมูลย้อนหลังได้ในหน้าเดียว</p>
+          <p class="header-sub">ตรวจสอบชั่วโมง OT รายละเอียดงาน และประวัติการลาย้อนหลังแบบเรียลไทม์</p>
         </div>
         <div class="header-actions">
-          <button class="btn btn-share" id="copyBtn">🔗 คัดลอกลิงก์แชร์</button>
+          <button class="btn btn-share" id="copyBtn"><i data-lucide="link" style="width:16px;height:16px;"></i> แชร์ลิงก์</button>
           <div class="update-pill" id="latestUpdate">อัปเดตล่าสุด -</div>
         </div>
       </div>
@@ -266,31 +307,32 @@
   </header>
 
   <main class="container">
+    <!-- Stats Board -->
     <section class="stats">
-      <div class="stat-card blue">
+      <div class="card stat-card">
         <div class="stat-head">
-          <div class="icon-box icon-blue">🕒</div>
+          <div class="icon-box icon-blue"><i data-lucide="clock"></i></div>
           <div class="stat-label">ชั่วโมง OT รวม</div>
         </div>
         <div class="stat-value"><strong id="statHours">0</strong><span>ชั่วโมง</span></div>
       </div>
-      <div class="stat-card emerald">
+      <div class="card stat-card">
         <div class="stat-head">
-          <div class="icon-box icon-emerald">💼</div>
+          <div class="icon-box icon-emerald"><i data-lucide="briefcase"></i></div>
           <div class="stat-label">รายการทำงาน</div>
         </div>
         <div class="stat-value"><strong id="statOt">0</strong><span>รายการ</span></div>
       </div>
-      <div class="stat-card amber">
+      <div class="card stat-card">
         <div class="stat-head">
-          <div class="icon-box icon-amber">⚠️</div>
+          <div class="icon-box icon-amber"><i data-lucide="calendar-off"></i></div>
           <div class="stat-label">ลากิจ / ลาป่วย / หยุด</div>
         </div>
         <div class="stat-value"><strong id="statLeave">0</strong><span>รายการ</span></div>
       </div>
-      <div class="stat-card violet">
+      <div class="card stat-card">
         <div class="stat-head">
-          <div class="icon-box icon-violet">👥</div>
+          <div class="icon-box icon-violet"><i data-lucide="users"></i></div>
           <div class="stat-label">สมาชิกที่มีข้อมูล</div>
         </div>
         <div class="stat-value"><strong id="statMembers">0</strong><span>คน</span></div>
@@ -298,53 +340,52 @@
     </section>
 
     <section class="layout">
+      <!-- Sidebar Filters -->
       <aside class="sidebar">
         <div class="card">
-          <h3 class="section-title">⚙️ ตัวกรองข้อมูล</h3>
+          <h3 class="section-title"><i data-lucide="filter"></i> ตัวกรองข้อมูล</h3>
           <div class="field">
             <label class="label" for="monthSelect">เลือกเดือน</label>
             <select id="monthSelect" class="select"></select>
           </div>
           <div class="field" style="margin-bottom:0">
-            <label class="label" for="searchInput">ค้นหา</label>
-            <input id="searchInput" class="input" placeholder="ชื่อ, งาน, วันที่" />
+            <label class="label" for="searchInput">ค้นหางาน / วันที่</label>
+            <input id="searchInput" class="input" placeholder="พิมพ์ค้นหา..." />
           </div>
         </div>
 
-        <div class="card" style="margin-top:16px">
-          <h3 class="section-title">👥 เลือกสมาชิก</h3>
-          <div class="member-list" id="memberList"></div>
-        </div>
-
-        <div class="card tip-card" style="margin-top:16px">
-          <h3 class="section-title" style="color:#fff;margin-bottom:12px">📊 มุมมองการใช้งาน</h3>
-          <p>หน้าเว็บนี้เหมาะสำหรับเปิดบนมือถือ แชร์ในกลุ่ม หรือฝังไว้ในระบบภายในเพื่อดูสรุปงานของทีมแบบรวดเร็ว</p>
+        <div class="card" style="margin-top:20px">
+          <h3 class="section-title"><i data-lucide="users"></i> เลือกสมาชิก</h3>
+          <div class="member-list hide-scrollbar" id="memberList"></div>
         </div>
       </aside>
 
+      <!-- Main Content -->
       <section>
-        <div class="tabs">
-          <button class="tab active-all" data-tab="all">📋 ทั้งหมด</button>
-          <button class="tab" data-tab="ot">💼 รายการ OT</button>
-          <button class="tab" data-tab="leave">🗓️ ประวัติการลา</button>
+        <div class="tabs hide-scrollbar">
+          <button class="tab active-all" data-tab="all"><i data-lucide="list"></i> ทั้งหมด</button>
+          <button class="tab" data-tab="ot"><i data-lucide="briefcase"></i> รายการ OT</button>
+          <button class="tab" data-tab="leave"><i data-lucide="calendar-x"></i> ประวัติการลา</button>
         </div>
 
         <div class="card list-card">
           <div class="table-head">
-            <div>วันที่ / พนักงาน</div>
-            <div style="text-align:center">สถานะ</div>
-            <div>รายละเอียดงาน</div>
+            <div class="col-person">วันที่ / พนักงาน</div>
+            <div class="col-status">สถานะ</div>
+            <div class="col-task">รายละเอียดงาน</div>
           </div>
+          
           <div class="items" id="items"></div>
+          
           <div class="empty" id="empty" style="display:none">
-            <div style="font-size:36px">✨</div>
-            <div class="big">ไม่พบข้อมูล</div>
-            <div>ลองเปลี่ยนเดือน ชื่อพนักงาน หรือคำค้นหาอีกครั้ง</div>
+            <i data-lucide="search-x"></i>
+            <div class="big">ไม่พบข้อมูลในเงื่อนไขนี้</div>
+            <p>ลองเปลี่ยนเดือน หมวดหมู่ หรือล้างคำค้นหาดูอีกครั้ง</p>
           </div>
         </div>
 
         <div class="footer-note">
-          <div>© 2026 TEAM PACK & MODIFY</div>
+          <div>&copy; 2026 TEAM PACK & MODIFY</div>
           <div id="footerMonth">อัปเดตข้อมูล: -</div>
         </div>
       </section>
@@ -352,6 +393,9 @@
   </main>
 
   <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
     const initialData = [
       { id: 1, date: '03/02/2026', name: 'แบงค์', hours: 3, task: 'เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้ + ประชุมแผนงาน', type: 'OT' },
       { id: 2, date: '03/02/2026', name: 'นักรบ', hours: 2, task: 'Y1974 + เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้', type: 'OT' },
@@ -470,15 +514,11 @@
       { id: 115, date: '26/03/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
       { id: 116, date: '27/03/2026', name: 'นักรบ', hours: 0, task: 'ลากิจ', type: 'Leave' },
       { id: 117, date: '27/03/2026', name: 'น้องกาย', hours: 0, task: 'ลาป่วย', type: 'Leave' },
-      
-      // 01/04/2026
       { id: 118, date: '01/04/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + สรุปเนื้อหาสำหรับประชุมกับทางสาขาตรัง', type: 'OT' },
       { id: 119, date: '01/04/2026', name: 'นักรบ', hours: 2, task: 'BLENDER : (2) + U5 : (1) + CHECK STOCK', type: 'OT' },
       { id: 120, date: '01/04/2026', name: 'Armin', hours: 2, task: 'U5 : (1) + 100XJ : (1) + CHECK STOCK', type: 'OT' },
       { id: 121, date: '01/04/2026', name: 'น้องกาย', hours: 2, task: 'M7A : (1) + U5 : (1) + CHECK SM MODIFY', type: 'OT' },
       { id: 122, date: '01/04/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้งและสินค้าส่งให้สาขาดอนเมือง', type: 'OT' },
-      
-      // 02/04/2026
       { id: 123, date: '02/04/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + สรุปเนื้อหาสำหรับประชุมกับทางสาขาตรัง', type: 'OT' },
       { id: 124, date: '02/04/2026', name: 'Armin', hours: 2, task: 'ไปติดตั้ง', type: 'OT' },
       { id: 125, date: '02/04/2026', name: 'น้องกาย', hours: 2, task: 'NEW WORK 20AF : (2)', type: 'OT' },
@@ -534,19 +574,6 @@
         }
       }
       return names;
-    }
-
-    function getNameClass(name){
-      switch(name){
-        case 'แบงค์': return 'tag-bank';
-        case 'นักรบ': return 'tag-nakrob';
-        case 'Armin': return 'tag-armin';
-        case 'น้องกาย': return 'tag-guy';
-        case 'พี่แมน': return 'tag-man';
-        case 'น้องบอม': return 'tag-bom';
-        case 'พี่ท็อป': return 'tag-top';
-        default: return 'tag-default';
-      }
     }
 
     function getGradClass(name){
@@ -614,11 +641,14 @@
       const wrap = document.getElementById('memberList');
       const names = getUniqueNames(state.activeMonth);
       if (!names.includes(state.filterName)) state.filterName = 'All';
-      wrap.innerHTML = names.map(name => `
-        <button class="member-btn ${state.filterName === name ? 'active' : ''}" data-name="${name}">
-          ${name === 'All' ? 'ทั้งหมด' : name}
+      wrap.innerHTML = names.map(name => {
+        const isActive = state.filterName === name;
+        return `
+        <button class="member-btn ${isActive ? 'active' : ''}" data-name="${name}">
+          <span class="dot"></span> ${name === 'All' ? 'แสดงทั้งหมด' : name}
         </button>
-      `).join('');
+      `}).join('');
+      
       wrap.querySelectorAll('[data-name]').forEach(btn => {
         btn.addEventListener('click', () => {
           state.filterName = btn.dataset.name;
@@ -653,41 +683,49 @@
       if (!list.length){
         items.innerHTML = '';
         empty.style.display = 'block';
+        lucide.createIcons();
         return;
       }
       empty.style.display = 'none';
       items.innerHTML = list.map(item => {
-        // จัดการ Badge ให้แสดงข้อความถูกต้องตามเงื่อนไข
+        
         let badgeHtml = '';
         if (item.hours > 0) {
-            badgeHtml = `<span class="hours ot">${item.hours} ชม.</span>`;
+            badgeHtml = `<span class="badge-status ot">${item.hours} ชม.</span>`;
         } else {
             let text = 'ลา / หยุด';
-            if (item.task.includes('เข้างานสาย')) text = 'มาสาย';
-            else if (item.task.includes('ขาดงาน')) text = 'ขาดงาน';
-            else if (item.task.includes('ลาออก')) text = 'ลาออก';
-            else if (item.task.includes('ลาป่วย')) text = 'ลาป่วย';
-            else if (item.task.includes('ลากิจ')) text = 'ลากิจ';
-            badgeHtml = `<span class="hours leave">${text}</span>`;
+            let statusClass = 'leave';
+            
+            if (item.task.includes('เข้างานสาย')) { text = 'มาสาย'; statusClass = 'warning'; }
+            else if (item.task.includes('ขาดงาน')) { text = 'ขาดงาน'; statusClass = 'warning'; }
+            else if (item.task.includes('ลาออก')) { text = 'ลาออก'; }
+            else if (item.task.includes('ลาป่วย')) { text = 'ลาป่วย'; }
+            else if (item.task.includes('ลากิจ')) { text = 'ลากิจ'; }
+            
+            badgeHtml = `<span class="badge-status ${statusClass}">${text}</span>`;
         }
 
         return `
         <div class="item">
           <div class="item-grid">
-            <div class="person">
-              <div class="avatar ${getGradClass(item.name)}">${item.name.substring(0,1)}</div>
-              <div>
-                <div class="person-name ${getNameClass(item.name)}">${item.name}</div>
-                <div class="date">📅 ${item.date}</div>
+            <div class="mobile-top-row">
+              <div class="person">
+                <div class="avatar ${getGradClass(item.name)}">${item.name}</div>
+                <div class="date"><i data-lucide="calendar"></i> ${item.date}</div>
+              </div>
+              <div class="status">
+                ${badgeHtml}
               </div>
             </div>
-            <div class="status">
-              ${badgeHtml}
+            <div class="task-col">
+              <div class="task">${escapeHtml(item.task)}</div>
             </div>
-            <div><div class="task">${escapeHtml(item.task)}</div></div>
           </div>
         </div>
       `}).join('');
+      
+      // Re-initialize icons inside new elements
+      lucide.createIcons();
     }
 
     function escapeHtml(str){
@@ -731,6 +769,7 @@
       }
     });
 
+    // Start App
     renderAll();
   </script>
 </body>
