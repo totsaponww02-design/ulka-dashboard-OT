@@ -95,6 +95,15 @@
     }
     .btn:hover { transform: translateY(-2px); }
     .btn-share { background: #fff; color: #0f172a; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+    
+    /* New Add Button */
+    .btn-add {
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      color: #fff; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn-add:hover { box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
+
     .update-pill {
       padding: 10px 16px; border-radius: var(--radius-pill);
       background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,.1);
@@ -140,12 +149,13 @@
     /* Form Elements */
     .field { margin-bottom: 16px; }
     .label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; color: var(--text-muted); }
-    .input, .select {
+    .input, .select, .textarea {
       width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-btn);
       background: #f8fafc; font-size: 14px; color: var(--text-main); outline: none;
       font-family: inherit; transition: all 0.2s; font-weight: 500;
     }
-    .input:focus, .select:focus {
+    .textarea { resize: vertical; min-height: 80px; }
+    .input:focus, .select:focus, .textarea:focus {
       background: #fff; border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     }
     
@@ -250,6 +260,58 @@
     .grad-top { background: linear-gradient(135deg, #818cf8, #4f46e5); }
     .grad-default { background: linear-gradient(135deg, #94a3b8, #475569); }
 
+    /* === Modal (Add Data) === */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px);
+      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; visibility: hidden; transition: all 0.3s ease;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    
+    .modal-card {
+      background: var(--card); border-radius: var(--radius-card); width: 100%; max-width: 500px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transform: translateY(20px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .modal-overlay.active .modal-card { transform: translateY(0); }
+    
+    .modal-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-header h2 { margin: 0; font-size: 18px; font-weight: 700; color: var(--text-main); }
+    .modal-close {
+      background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%;
+      display: grid; place-items: center; cursor: pointer; color: var(--text-muted); transition: 0.2s;
+    }
+    .modal-close:hover { background: #e2e8f0; color: var(--danger); }
+    
+    .modal-body { padding: 24px; overflow-y: auto; max-height: calc(100vh - 150px); }
+    
+    .modal-footer {
+      padding: 16px 24px; border-top: 1px solid var(--border); background: #f8fafc;
+      display: flex; justify-content: flex-end; gap: 12px;
+    }
+    .btn-cancel { background: #fff; border: 1px solid var(--border); color: var(--text-main); }
+    .btn-cancel:hover { background: #f1f5f9; }
+    .btn-submit { background: var(--primary); color: #fff; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
+    .btn-submit:hover { background: var(--primary-hover); }
+
+    /* === Toast Notification === */
+    .toast-container {
+      position: fixed; bottom: 24px; right: 24px; z-index: 1100;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .toast {
+      background: #fff; border-left: 4px solid var(--success); border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px;
+      transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toast.show { transform: translateX(0); }
+    .toast i { color: var(--success); }
+
     /* === RESPONSIVE === */
     @media (max-width: 1024px){
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
@@ -257,7 +319,7 @@
       .member-list { flex-direction: row; overflow-x: auto; padding-bottom: 8px; gap: 8px; }
       .member-btn { padding: 10px 16px; background: #f8fafc; white-space: nowrap; flex-shrink: 0; }
       .member-btn .dot { display: none; }
-      .member-btn.active { background: var(--primary-bg); color: var(--primary); }
+      .member-btn.active { background: var(--primary-bg); border-color: #bfdbfe; color: var(--primary); }
     }
     
     @media (max-width: 768px){
@@ -286,6 +348,10 @@
         border-radius: var(--radius-btn); 
         border: 1px solid var(--border); font-size: 14px;
       }
+      
+      .modal-card { max-width: 100%; height: auto; border-radius: 20px; }
+      .toast-container { bottom: 16px; right: 16px; left: 16px; }
+      .toast { justify-content: center; }
     }
   </style>
 </head>
@@ -299,8 +365,8 @@
           <p class="header-sub">ตรวจสอบชั่วโมง OT รายละเอียดงาน และประวัติการลาย้อนหลังแบบเรียลไทม์</p>
         </div>
         <div class="header-actions">
+          <button class="btn btn-add" id="openAddModalBtn"><i data-lucide="plus-circle" style="width:16px;height:16px;"></i> เพิ่มข้อมูล</button>
           <button class="btn btn-share" id="copyBtn"><i data-lucide="link" style="width:16px;height:16px;"></i> แชร์ลิงก์</button>
-          <div class="update-pill" id="latestUpdate">อัปเดตล่าสุด -</div>
         </div>
       </div>
     </div>
@@ -392,10 +458,60 @@
     </section>
   </main>
 
+  <!-- === Add Data Modal === -->
+  <div id="addModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>เพิ่มข้อมูลใหม่</h2>
+        <button class="modal-close" id="closeModalBtn"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
+      </div>
+      <form id="addDataForm">
+        <div class="modal-body">
+          <div class="field">
+            <label class="label" for="formDate">วันที่</label>
+            <input type="date" id="formDate" class="input" required />
+          </div>
+          <div class="field">
+            <label class="label" for="formName">ชื่อพนักงาน</label>
+            <div style="display: flex; gap: 8px;">
+                <select id="formName" class="select" required style="flex: 1;">
+                    <!-- Options populated by JS -->
+                </select>
+                <input type="text" id="formNewName" class="input" placeholder="พิมพ์ชื่อใหม่..." style="display: none; flex: 1;" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="formType">ประเภทรายการ</label>
+            <select id="formType" class="select" required>
+              <option value="OT">ทำงาน / ทำ OT</option>
+              <option value="Leave">ลา / หยุด / ขาด / สาย</option>
+            </select>
+          </div>
+          <div class="field" id="hoursField">
+            <label class="label" for="formHours">จำนวนชั่วโมง OT (ตัวเลข หรือ คำเช่น "พิเศษ")</label>
+            <input type="text" id="formHours" class="input" value="2" placeholder="เช่น 2, 1.5 หรือ พิเศษ" />
+          </div>
+          <div class="field" style="margin-bottom:0;">
+            <label class="label" for="formTask">รายละเอียดงาน / เหตุผลการลา</label>
+            <textarea id="formTask" class="textarea" placeholder="ระบุรายละเอียด..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" id="cancelModalBtn">ยกเลิก</button>
+          <button type="submit" class="btn btn-submit"><i data-lucide="save" style="width:16px;height:16px;"></i> บันทึกข้อมูล</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
   <script>
     // Initialize Lucide Icons
     lucide.createIcons();
 
+    // ข้อมูลตั้งต้น
     const initialData = [
       { id: 1, date: '03/02/2026', name: 'แบงค์', hours: 3, task: 'เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้ + ประชุมแผนงาน', type: 'OT' },
       { id: 2, date: '03/02/2026', name: 'นักรบ', hours: 2, task: 'Y1974 + เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้', type: 'OT' },
@@ -522,8 +638,20 @@
       { id: 123, date: '02/04/2026', name: 'แบงค์', hours: 2, task: 'ตรวจสอบงานภายในทีม + สรุปเนื้อหาสำหรับประชุมกับทางสาขาตรัง', type: 'OT' },
       { id: 124, date: '02/04/2026', name: 'Armin', hours: 2, task: 'ไปติดตั้ง', type: 'OT' },
       { id: 125, date: '02/04/2026', name: 'น้องกาย', hours: 2, task: 'NEW WORK 20AF : (2)', type: 'OT' },
-      { id: 126, date: '02/04/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' }
+      { id: 126, date: '02/04/2026', name: 'พี่แมน', hours: 2, task: 'แพ็คออเดอร์ที่ค้าง + เตรียมเครื่องติดตั้ง', type: 'OT' },
+      { id: 127, date: '04/04/2026', name: 'Armin', hours: 'พิเศษ', task: 'โอทีพิเศษ วันเสาร์', type: 'OT' }
     ];
+
+    // === ระบบโหลดและจัดเก็บข้อมูลด้วย LocalStorage ===
+    let appData = [...initialData];
+    const savedData = localStorage.getItem('otDashboardData_v1');
+    if (savedData) {
+      appData = JSON.parse(savedData);
+    }
+    
+    function saveDataToStorage() {
+      localStorage.setItem('otDashboardData_v1', JSON.stringify(appData));
+    }
 
     const monthNamesTh = {
       '01':'มกราคม','02':'กุมภาพันธ์','03':'มีนาคม','04':'เมษายน','05':'พฤษภาคม','06':'มิถุนายน',
@@ -549,7 +677,7 @@
     }
 
     function getUniqueMonths(){
-      const months = Array.from(new Set(initialData.map(item => {
+      const months = Array.from(new Set(appData.map(item => {
         const [, m, y] = item.date.split('/');
         return `${m}/${y}`;
       })));
@@ -563,7 +691,7 @@
     }
 
     function getUniqueNames(activeMonth){
-      let names = ['All', ...Array.from(new Set(initialData.map(item => item.name)))];
+      let names = ['All', ...Array.from(new Set(appData.map(item => item.name)))];
       if (activeMonth !== 'All') {
         const [m, y] = activeMonth.split('/').map(Number);
         if (y > 2026 || (y === 2026 && m >= 3)) {
@@ -590,7 +718,7 @@
     }
 
     function filteredData(){
-      return initialData
+      return appData
         .filter(item => {
           const matchesName = state.filterName === 'All' || item.name === state.filterName;
           const s = state.searchTerm.toLowerCase();
@@ -600,8 +728,9 @@
             item.name.toLowerCase().includes(s);
 
           let matchesTab = true;
-          if (state.activeTab === 'ot') matchesTab = item.hours > 0;
-          if (state.activeTab === 'leave') matchesTab = item.hours === 0;
+          const isOt = item.type === 'OT';
+          if (state.activeTab === 'ot') matchesTab = isOt;
+          if (state.activeTab === 'leave') matchesTab = !isOt;
 
           const matchesMonth = state.activeMonth === 'All' || item.date.endsWith(state.activeMonth);
           return matchesName && matchesSearch && matchesTab && matchesMonth;
@@ -610,27 +739,27 @@
     }
 
     function stats(){
-      const base = initialData.filter(item => {
+      const base = appData.filter(item => {
         const matchesName = state.filterName === 'All' || item.name === state.filterName;
         const matchesMonth = state.activeMonth === 'All' || item.date.endsWith(state.activeMonth);
         return matchesName && matchesMonth;
       });
       return {
-        totalHours: base.reduce((sum, item) => sum + item.hours, 0),
-        otCount: base.filter(i => i.hours > 0).length,
-        leaveCount: base.filter(i => i.hours === 0).length,
+        totalHours: base.reduce((sum, item) => sum + (Number(item.hours) || 0), 0),
+        otCount: base.filter(i => i.type === 'OT').length,
+        leaveCount: base.filter(i => i.type !== 'OT').length,
         members: new Set(base.map(i => i.name)).size,
       };
     }
 
     function latestUpdate(){
-      return [...initialData].sort((a,b) => parseDate(b.date) - parseDate(a.date))[0]?.date || '-';
+      return [...appData].sort((a,b) => parseDate(b.date) - parseDate(a.date))[0]?.date || '-';
     }
 
     function renderMonths(){
       const select = document.getElementById('monthSelect');
       const months = getUniqueMonths();
-      if (state.activeMonth === 'All') {
+      if (!months.includes(state.activeMonth) && state.activeMonth !== 'All') {
         state.activeMonth = months[1] || 'All';
       }
       select.innerHTML = months.map(m => `<option value="${m}">${formatMonth(m)}</option>`).join('');
@@ -668,12 +797,12 @@
 
     function renderStats(){
       const s = stats();
-      document.getElementById('statHours').textContent = s.totalHours;
-      document.getElementById('statOt').textContent = s.otCount;
-      document.getElementById('statLeave').textContent = s.leaveCount;
-      document.getElementById('statMembers').textContent = s.members;
-      document.getElementById('latestUpdate').textContent = `อัปเดตล่าสุด ${latestUpdate()}`;
-      document.getElementById('footerMonth').textContent = `อัปเดตข้อมูล: ${formatMonth(state.activeMonth)}`;
+      if (document.getElementById('statHours')) document.getElementById('statHours').textContent = s.totalHours;
+      if (document.getElementById('statOt')) document.getElementById('statOt').textContent = s.otCount;
+      if (document.getElementById('statLeave')) document.getElementById('statLeave').textContent = s.leaveCount;
+      if (document.getElementById('statMembers')) document.getElementById('statMembers').textContent = s.members;
+      if (document.getElementById('latestUpdate')) document.getElementById('latestUpdate').textContent = `อัปเดตล่าสุด ${latestUpdate()}`;
+      if (document.getElementById('footerMonth')) document.getElementById('footerMonth').textContent = `อัปเดตข้อมูล: ${formatMonth(state.activeMonth)}`;
     }
 
     function renderItems(){
@@ -690,8 +819,9 @@
       items.innerHTML = list.map(item => {
         
         let badgeHtml = '';
-        if (item.hours > 0) {
-            badgeHtml = `<span class="badge-status ot">${item.hours} ชม.</span>`;
+        if (item.type === 'OT') {
+            const displayHrs = (isNaN(item.hours) || item.hours === '') ? item.hours : `${item.hours} ชม.`;
+            badgeHtml = `<span class="badge-status ot">${displayHrs}</span>`;
         } else {
             let text = 'ลา / หยุด';
             let statusClass = 'leave';
@@ -724,7 +854,6 @@
         </div>
       `}).join('');
       
-      // Re-initialize icons inside new elements
       lucide.createIcons();
     }
 
@@ -743,6 +872,7 @@
       document.getElementById('searchInput').value = state.searchTerm;
     }
 
+    // === Event Listeners หลัก ===
     document.getElementById('monthSelect').addEventListener('change', (e) => {
       state.activeMonth = e.target.value;
       renderAll();
@@ -763,11 +893,149 @@
     document.getElementById('copyBtn').addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(window.location.href);
-        alert('คัดลอกลิงก์สำหรับแชร์แล้ว');
+        showToast('คัดลอกลิงก์สำหรับแชร์แล้ว', 'success');
       } catch (e) {
         alert('คัดลอกลิงก์ไม่สำเร็จ กรุณาคัดลอกจากแถบ URL');
       }
     });
+
+    // === ระบบ Modal เพิ่มข้อมูล ===
+    const addModal = document.getElementById('addModal');
+    const openAddModalBtn = document.getElementById('openAddModalBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelModalBtn = document.getElementById('cancelModalBtn');
+    const addDataForm = document.getElementById('addDataForm');
+    const formType = document.getElementById('formType');
+    const hoursField = document.getElementById('hoursField');
+    const formNameSelect = document.getElementById('formName');
+    const formNewNameInput = document.getElementById('formNewName');
+
+    function openModal() {
+      // เซ็ตวันที่ปัจจุบันเป็นค่าเริ่มต้น
+      document.getElementById('formDate').valueAsDate = new Date();
+      
+      // ดึงรายชื่อทั้งหมดมาใส่ใน Dropdown
+      const names = getUniqueNames('All').filter(n => n !== 'All');
+      formNameSelect.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
+      formNameSelect.innerHTML += `<option value="NEW_NAME">+ เพิ่มชื่อพนักงานใหม่</option>`;
+      
+      formNewNameInput.style.display = 'none';
+      formNewNameInput.removeAttribute('required');
+      
+      addModal.classList.add('active');
+    }
+
+    function closeModal() {
+      addModal.classList.remove('active');
+      addDataForm.reset();
+      hoursField.style.display = 'block';
+    }
+
+    if (openAddModalBtn) openAddModalBtn.addEventListener('click', openModal);
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
+    
+    // ปิดเมื่อคลิกพื้นหลัง
+    if (addModal) {
+      addModal.addEventListener('click', (e) => {
+        if (e.target === addModal) closeModal();
+      });
+    }
+
+    // จัดการ Dropdown ชื่อพนักงาน
+    if (formNameSelect) {
+      formNameSelect.addEventListener('change', (e) => {
+        if (e.target.value === 'NEW_NAME') {
+          formNameSelect.style.display = 'none';
+          formNewNameInput.style.display = 'block';
+          formNewNameInput.setAttribute('required', 'true');
+          formNewNameInput.focus();
+        }
+      });
+    }
+
+    // ซ่อน/แสดง ช่องกรอกชั่วโมงเมื่อเลือกประเภท
+    if (formType) {
+      formType.addEventListener('change', (e) => {
+        if (e.target.value === 'Leave') {
+          hoursField.style.display = 'none';
+          document.getElementById('formHours').value = '0';
+        } else {
+          hoursField.style.display = 'block';
+          document.getElementById('formHours').value = '2';
+        }
+      });
+    }
+
+    // บันทึกฟอร์ม
+    if (addDataForm) {
+      addDataForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const dateVal = document.getElementById('formDate').value; // yyyy-mm-dd
+        const [year, month, day] = dateVal.split('-');
+        const formattedDate = `${day}/${month}/${year}`;
+        
+        let finalName = formNameSelect.value;
+        if (finalName === 'NEW_NAME') {
+          finalName = formNewNameInput.value.trim();
+        }
+
+        const typeVal = formType.value;
+        let hoursVal = document.getElementById('formHours').value.trim();
+        
+        // แปลงเป็นตัวเลข ถ้าไม่ใช่ตัวหนังสือ
+        if (!isNaN(hoursVal) && hoursVal !== '') {
+          hoursVal = parseFloat(hoursVal);
+        }
+
+        const taskVal = document.getElementById('formTask').value.trim();
+
+        const newItem = {
+          id: Date.now(), // ใช้ timestamp เป็น ID ไม่ซ้ำ
+          date: formattedDate,
+          name: finalName,
+          hours: typeVal === 'OT' ? hoursVal : 0,
+          task: taskVal,
+          type: typeVal
+        };
+
+        appData.push(newItem);
+        saveDataToStorage(); // เซฟลงเครื่อง
+        
+        // อัปเดตหน้าจอ
+        state.activeMonth = 'All'; // กลับไปหน้าแรกให้เห็นข้อมูลล่าสุด
+        renderAll();
+        closeModal();
+        showToast('บันทึกข้อมูลสำเร็จเรียบร้อย!', 'success');
+      });
+    }
+
+    // === ระบบแจ้งเตือน Toast ===
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      if(!container) return;
+      
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      
+      const icon = type === 'success' 
+        ? '<i data-lucide="check-circle"></i>' 
+        : '<i data-lucide="info"></i>';
+        
+      toast.innerHTML = `${icon} <span>${message}</span>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      // Animate In
+      setTimeout(() => toast.classList.add('show'), 10);
+
+      // Animate Out & Remove
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+      }, 3000);
+    }
 
     // Start App
     renderAll();
