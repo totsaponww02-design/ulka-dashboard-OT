@@ -196,13 +196,11 @@
     /* === Table/List === */
     .list-card { overflow: hidden; padding: 4px; }
     .table-head {
-      display: flex; align-items: center; gap: 20px;
+      display: grid; grid-template-columns: 3.5fr 1.5fr 5fr; gap: 20px; align-items: center;
       padding: 16px 24px 12px; font-size: 13px; font-weight: 600; color: var(--text-muted);
       border-bottom: 1px solid var(--border); margin-bottom: 8px;
     }
-    .col-person { width: 35%; }
-    .col-status { width: 15%; text-align: center; }
-    .col-task { width: 50%; }
+    .col-status { text-align: center; }
 
     .item { 
       padding: 16px 20px; margin: 0 8px 8px; border-radius: var(--radius-btn); 
@@ -210,10 +208,9 @@
     }
     .item:hover { background: #f8fafc; border-color: #e2e8f0; }
     
-    .item-grid { display: flex; align-items: center; gap: 20px; }
-    .mobile-top-row { display: flex; align-items: center; width: 50%; gap: 20px; flex-shrink: 0; }
+    .item-grid { display: grid; grid-template-columns: 3.5fr 1.5fr 5fr; gap: 20px; align-items: center; }
     
-    .person { flex: 1; display: flex; gap: 14px; align-items: center; min-width: 0; }
+    .person { display: flex; gap: 14px; align-items: center; min-width: 0; }
     
     /* Avatar Badge */
     .avatar {
@@ -227,7 +224,7 @@
     .date { font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; font-weight: 500; }
     .date i { width: 14px; height: 14px; }
     
-    .status { width: 15%; display: flex; justify-content: center; flex-shrink: 0; }
+    .status { display: flex; justify-content: center; }
     .badge-status {
       display: inline-flex; align-items: center; justify-content: center;
       padding: 8px 16px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 600; white-space: nowrap;
@@ -236,7 +233,7 @@
     .badge-status.leave { background: #f1f5f9; color: #475569; }
     .badge-status.warning { background: #fff7ed; color: #b45309; }
     
-    .task-col { flex: 1; min-width: 0; }
+    .task-col { min-width: 0; }
     .task { font-size: 15px; line-height: 1.6; color: var(--text-main); font-weight: 400; }
     
     /* Empty State */
@@ -333,16 +330,15 @@
       .table-head { display: none; }
       
       .item { padding: 16px; border: 1px solid var(--border); margin-bottom: 12px; }
-      .item-grid { flex-direction: column; align-items: stretch; gap: 12px; }
-      .mobile-top-row { width: 100%; justify-content: space-between; gap: 12px; }
-      .person { flex: unset; gap: 12px; }
+      .item-grid { grid-template-columns: 1fr auto; gap: 12px; align-items: flex-start; }
+      .person { gap: 12px; }
       .avatar { min-width: 75px; height: 34px; font-size: 13px; padding: 0 12px; }
       .date { font-size: 13px; }
       
-      .status { width: auto; flex-shrink: 0; }
+      .status { justify-content: flex-end; }
       .badge-status { padding: 6px 12px; font-size: 12px; }
       
-      .task-col { width: 100%; }
+      .task-col { grid-column: 1 / -1; width: 100%; margin-top: 4px; }
       .task { 
         background: #f8fafc; padding: 14px; 
         border-radius: var(--radius-btn); 
@@ -838,14 +834,12 @@
         return `
         <div class="item">
           <div class="item-grid">
-            <div class="mobile-top-row">
-              <div class="person">
-                <div class="avatar ${getGradClass(item.name)}">${item.name}</div>
-                <div class="date"><i data-lucide="calendar"></i> ${item.date}</div>
-              </div>
-              <div class="status">
-                ${badgeHtml}
-              </div>
+            <div class="person">
+              <div class="avatar ${getGradClass(item.name)}">${item.name}</div>
+              <div class="date"><i data-lucide="calendar"></i> ${item.date}</div>
+            </div>
+            <div class="status">
+              ${badgeHtml}
             </div>
             <div class="task-col">
               <div class="task">${escapeHtml(item.task)}</div>
