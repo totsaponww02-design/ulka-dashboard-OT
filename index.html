@@ -696,11 +696,23 @@
       '07':'กรกฎาคม','08':'สิงหาคม','09':'กันยายน','10':'ตุลาคม','11':'พฤศจิกายน','12':'ธันวาคม'
     };
 
+    // หาเดือนปัจจุบัน หรือ เดือนล่าสุดที่มีข้อมูล เพื่อใช้เป็นค่าเริ่มต้น
+    const todayDate = new Date();
+    const currentMonthStr = String(todayDate.getMonth() + 1).padStart(2, '0') + '/' + todayDate.getFullYear();
+    const availableMonthsTemp = Array.from(new Set(appData.map(item => item.date.substring(3)))).sort((a,b) => {
+        const [mA,yA] = a.split('/').map(Number);
+        const [mB,yB] = b.split('/').map(Number);
+        if (yA !== yB) return yB - yA;
+        return mB - mA;
+    });
+    
+    const defaultMonth = availableMonthsTemp.includes(currentMonthStr) ? currentMonthStr : (availableMonthsTemp[0] || 'All');
+
     const state = {
       filterName: 'All',
       searchTerm: '',
       activeTab: 'all',
-      activeMonth: 'All'
+      activeMonth: defaultMonth
     };
 
     function parseDate(date){
@@ -1099,7 +1111,7 @@
         }
 
         saveDataToStorage();
-        state.activeMonth = 'All';
+        state.activeMonth = `${month}/${year}`; // สลับไปดูเดือนที่เพิ่งเพิ่ม/แก้ไขข้อมูล
         renderAll();
         closeFormModal();
       });
