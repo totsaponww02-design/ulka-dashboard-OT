@@ -109,7 +109,16 @@
       padding: 10px 16px; border-radius: var(--radius-pill);
       background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,.1);
       color: #e2e8f0; font-size: 13px; font-weight: 500; backdrop-filter: blur(8px);
+      display: flex; align-items: center; gap: 6px;
     }
+    
+    /* Cloud Sync Animation */
+    @keyframes pulse-cloud {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.9); }
+    }
+    .cloud-syncing i { animation: pulse-cloud 1.5s ease-in-out infinite; color: #38bdf8; }
+    .cloud-synced i { color: #34d399; }
 
     /* === Main Content === */
     main { margin-top: -45px; padding-bottom: 48px; position: relative; z-index: 10; }
@@ -237,7 +246,7 @@
     .task-col { min-width: 0; }
     .task { font-size: 15px; line-height: 1.6; color: var(--text-main); font-weight: 400; word-break: break-word; }
 
-    /* Action Buttons (Edit / Delete) */
+    /* Action Buttons */
     .action-col { display: flex; justify-content: flex-end; gap: 4px; }
     .btn-icon {
       background: transparent; border: none; color: var(--text-light);
@@ -306,7 +315,7 @@
     .btn-submit { background: var(--primary); color: #fff; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
     .btn-submit:hover { background: var(--primary-hover); }
 
-    /* === Toast Notification === */
+    /* === Toast === */
     .toast-container {
       position: fixed; bottom: 24px; right: 24px; z-index: 1100;
       display: flex; flex-direction: column; gap: 10px;
@@ -342,14 +351,9 @@
       
       .item { position: relative; padding: 16px; border: 1px solid var(--border); margin-bottom: 12px; }
       .item-grid { 
-        display: grid; 
-        grid-template-columns: 1fr auto; 
-        grid-template-areas: 
-          "person actions"
-          "status status"
-          "task task";
-        gap: 12px; 
-        align-items: center; 
+        display: grid; grid-template-columns: 1fr auto; 
+        grid-template-areas: "person actions" "status status" "task task";
+        gap: 12px; align-items: center; 
       }
       
       .person { grid-area: person; gap: 12px; }
@@ -360,11 +364,7 @@
       .badge-status { padding: 6px 12px; font-size: 12px; }
       
       .task-col { grid-area: task; width: 100%; margin-top: 4px; }
-      .task { 
-        background: #f8fafc; padding: 14px; 
-        border-radius: var(--radius-btn); 
-        border: 1px solid var(--border); font-size: 14px;
-      }
+      .task { background: #f8fafc; padding: 14px; border-radius: var(--radius-btn); border: 1px solid var(--border); font-size: 14px; }
 
       .action-col { grid-area: actions; justify-content: flex-end; }
       
@@ -386,46 +386,33 @@
         <div class="header-actions">
           <button class="btn btn-add" id="openAddModalBtn"><i data-lucide="plus-circle" style="width:16px;height:16px;"></i> เพิ่มข้อมูล</button>
           <button class="btn btn-share" id="copyBtn"><i data-lucide="link" style="width:16px;height:16px;"></i> แชร์ลิงก์</button>
+          <div class="update-pill cloud-syncing" id="cloudStatus"><i data-lucide="cloud"></i> กำลังเชื่อมต่อ Cloud...</div>
         </div>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <!-- Stats Board -->
     <section class="stats">
       <div class="card stat-card">
-        <div class="stat-head">
-          <div class="icon-box icon-blue"><i data-lucide="clock"></i></div>
-          <div class="stat-label">ชั่วโมง OT รวม</div>
-        </div>
+        <div class="stat-head"><div class="icon-box icon-blue"><i data-lucide="clock"></i></div><div class="stat-label">ชั่วโมง OT รวม</div></div>
         <div class="stat-value"><strong id="statHours">0</strong><span>ชั่วโมง</span></div>
       </div>
       <div class="card stat-card">
-        <div class="stat-head">
-          <div class="icon-box icon-emerald"><i data-lucide="briefcase"></i></div>
-          <div class="stat-label">รายการทำงาน</div>
-        </div>
+        <div class="stat-head"><div class="icon-box icon-emerald"><i data-lucide="briefcase"></i></div><div class="stat-label">รายการทำงาน</div></div>
         <div class="stat-value"><strong id="statOt">0</strong><span>รายการ</span></div>
       </div>
       <div class="card stat-card">
-        <div class="stat-head">
-          <div class="icon-box icon-amber"><i data-lucide="calendar-off"></i></div>
-          <div class="stat-label">ลากิจ / ลาป่วย / หยุด</div>
-        </div>
+        <div class="stat-head"><div class="icon-box icon-amber"><i data-lucide="calendar-off"></i></div><div class="stat-label">ลากิจ / ลาป่วย / หยุด</div></div>
         <div class="stat-value"><strong id="statLeave">0</strong><span>รายการ</span></div>
       </div>
       <div class="card stat-card">
-        <div class="stat-head">
-          <div class="icon-box icon-violet"><i data-lucide="users"></i></div>
-          <div class="stat-label">สมาชิกที่มีข้อมูล</div>
-        </div>
+        <div class="stat-head"><div class="icon-box icon-violet"><i data-lucide="users"></i></div><div class="stat-label">สมาชิกที่มีข้อมูล</div></div>
         <div class="stat-value"><strong id="statMembers">0</strong><span>คน</span></div>
       </div>
     </section>
 
     <section class="layout">
-      <!-- Sidebar Filters -->
       <aside class="sidebar">
         <div class="card">
           <h3 class="section-title"><i data-lucide="filter"></i> ตัวกรองข้อมูล</h3>
@@ -438,14 +425,12 @@
             <input id="searchInput" class="input" placeholder="พิมพ์ค้นหา..." />
           </div>
         </div>
-
         <div class="card" style="margin-top:20px">
           <h3 class="section-title"><i data-lucide="users"></i> เลือกสมาชิก</h3>
           <div class="member-list hide-scrollbar" id="memberList"></div>
         </div>
       </aside>
 
-      <!-- Main Content -->
       <section>
         <div class="tabs hide-scrollbar">
           <button class="tab active-all" data-tab="all"><i data-lucide="list"></i> ทั้งหมด</button>
@@ -460,9 +445,7 @@
             <div class="col-task">รายละเอียดงาน</div>
             <div class="col-action"></div>
           </div>
-          
           <div class="items" id="items"></div>
-          
           <div class="empty" id="empty" style="display:none">
             <i data-lucide="search-x"></i>
             <div class="big">ไม่พบข้อมูลในเงื่อนไขนี้</div>
@@ -478,7 +461,7 @@
     </section>
   </main>
 
-  <!-- === Form Modal (Add / Edit) === -->
+  <!-- Modals -->
   <div id="formModal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
@@ -494,9 +477,7 @@
           <div class="field">
             <label class="label" for="formName">ชื่อพนักงาน</label>
             <div style="display: flex; gap: 8px;">
-                <select id="formName" class="select" required style="flex: 1;">
-                    <!-- Options populated by JS -->
-                </select>
+                <select id="formName" class="select" required style="flex: 1;"></select>
                 <input type="text" id="formNewName" class="input" placeholder="พิมพ์ชื่อใหม่..." style="display: none; flex: 1;" />
             </div>
           </div>
@@ -524,7 +505,6 @@
     </div>
   </div>
 
-  <!-- === Delete Confirm Modal === -->
   <div id="deleteModal" class="modal-overlay">
     <div class="modal-card" style="max-width: 400px;">
       <div class="modal-header">
@@ -542,15 +522,32 @@
     </div>
   </div>
 
-  <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <script>
-    // Initialize Lucide Icons
+  <!-- === Firebase Cloud Sync Setup === -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Firebase Configuration Injector
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+      apiKey: "dummy", projectId: "dummy" 
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    
+    let currentUser = null;
+    let isCloudReady = false;
+    let isSeeding = false;
+
     lucide.createIcons();
 
-    // ข้อมูลตั้งต้น
-    const initialData = [
+    // Data from previous local version
+    const fallbackInitialData = [
       { id: 1, date: '03/02/2026', name: 'แบงค์', hours: 3, task: 'เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้ + ประชุมแผนงาน', type: 'OT' },
       { id: 2, date: '03/02/2026', name: 'นักรบ', hours: 2, task: 'Y1974 + เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้', type: 'OT' },
       { id: 3, date: '03/02/2026', name: 'Armin', hours: 2, task: 'เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้', type: 'OT' },
@@ -680,40 +677,104 @@
       { id: 127, date: '04/04/2026', name: 'Armin', hours: 'พิเศษ', task: 'โอทีพิเศษ วันเสาร์', type: 'OT' }
     ];
 
-    // === ระบบโหลดและจัดเก็บข้อมูลด้วย LocalStorage ===
-    let appData = [...initialData];
-    const savedData = localStorage.getItem('otDashboardData_v1');
-    if (savedData) {
-      appData = JSON.parse(savedData);
-    }
-    
-    function saveDataToStorage() {
-      localStorage.setItem('otDashboardData_v1', JSON.stringify(appData));
-    }
+    let appData = []; 
 
     const monthNamesTh = {
       '01':'มกราคม','02':'กุมภาพันธ์','03':'มีนาคม','04':'เมษายน','05':'พฤษภาคม','06':'มิถุนายน',
       '07':'กรกฎาคม','08':'สิงหาคม','09':'กันยายน','10':'ตุลาคม','11':'พฤศจิกายน','12':'ธันวาคม'
     };
 
-    // หาเดือนปัจจุบัน หรือ เดือนล่าสุดที่มีข้อมูล เพื่อใช้เป็นค่าเริ่มต้น
-    const todayDate = new Date();
-    const currentMonthStr = String(todayDate.getMonth() + 1).padStart(2, '0') + '/' + todayDate.getFullYear();
-    const availableMonthsTemp = Array.from(new Set(appData.map(item => item.date.substring(3)))).sort((a,b) => {
-        const [mA,yA] = a.split('/').map(Number);
-        const [mB,yB] = b.split('/').map(Number);
-        if (yA !== yB) return yB - yA;
-        return mB - mA;
-    });
-    
-    const defaultMonth = availableMonthsTemp.includes(currentMonthStr) ? currentMonthStr : (availableMonthsTemp[0] || 'All');
-
     const state = {
       filterName: 'All',
       searchTerm: '',
       activeTab: 'all',
-      activeMonth: defaultMonth
+      activeMonth: 'All'
     };
+
+    // === Authentication และ Cloud Synchronization ===
+    const initApp = async () => {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (error) {
+        console.error("Auth Error:", error);
+        showToast('ไม่สามารถเชื่อมต่อระบบ Cloud ได้', 'error');
+      }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      if (user) {
+        loadDataFromCloud();
+      }
+    });
+
+    initApp();
+
+    function loadDataFromCloud() {
+      if (!currentUser) return;
+      const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'ot_records');
+      
+      onSnapshot(colRef, (snapshot) => {
+        const data = [];
+        snapshot.forEach(doc => {
+          data.push({ id: Number(doc.id), ...doc.data() });
+        });
+        
+        // ถ้าฐานข้อมูลบน Cloud ยังว่างเปล่า จะทำการอัปโหลดข้อมูลเริ่มต้น (seed) ให้ครั้งแรก
+        if (data.length === 0 && appData.length === 0 && !isSeeding) {
+          seedInitialDataToCloud();
+        } else if (data.length > 0) {
+          appData = data.sort((a,b) => b.id - a.id); // เรียงตาม ID ล่าสุด
+          
+          if (!isCloudReady) {
+            isCloudReady = true;
+            document.getElementById('cloudStatus').classList.remove('cloud-syncing');
+            document.getElementById('cloudStatus').classList.add('cloud-synced');
+            document.getElementById('cloudStatus').innerHTML = '<i data-lucide="cloud-check"></i> ซิงค์กับ Cloud แล้ว';
+            lucide.createIcons();
+            setDefaultMonth(); // ตั้งค่าเดือนเริ่มต้นครั้งเดียวเมื่อโหลดเสร็จ
+          }
+          
+          renderAll();
+        }
+      }, (error) => {
+        console.error("Snapshot error:", error);
+      });
+    }
+
+    async function seedInitialDataToCloud() {
+      isSeeding = true;
+      try {
+        const promises = fallbackInitialData.map(item => {
+          const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'ot_records', String(item.id));
+          return setDoc(docRef, item);
+        });
+        await Promise.all(promises);
+        isSeeding = false;
+      } catch(e) {
+        console.error("Seed error", e);
+        isSeeding = false;
+      }
+    }
+    // ============================================
+
+    function setDefaultMonth() {
+      if(appData.length === 0) return;
+      const todayDate = new Date();
+      const currentMonthStr = String(todayDate.getMonth() + 1).padStart(2, '0') + '/' + todayDate.getFullYear();
+      const availableMonthsTemp = Array.from(new Set(appData.map(item => item.date.substring(3)))).sort((a,b) => {
+          const [mA,yA] = a.split('/').map(Number);
+          const [mB,yB] = b.split('/').map(Number);
+          if (yA !== yB) return yB - yA;
+          return mB - mA;
+      });
+      state.activeMonth = availableMonthsTemp.includes(currentMonthStr) ? currentMonthStr : (availableMonthsTemp[0] || 'All');
+      renderAll();
+    }
 
     function parseDate(date){
       const [day, month, year] = date.split('/').map(Number);
@@ -802,10 +863,6 @@
       };
     }
 
-    function latestUpdate(){
-      return [...appData].sort((a,b) => parseDate(b.date) - parseDate(a.date))[0]?.date || '-';
-    }
-
     function renderMonths(){
       const select = document.getElementById('monthSelect');
       const months = getUniqueMonths();
@@ -851,7 +908,6 @@
       if (document.getElementById('statOt')) document.getElementById('statOt').textContent = s.otCount;
       if (document.getElementById('statLeave')) document.getElementById('statLeave').textContent = s.leaveCount;
       if (document.getElementById('statMembers')) document.getElementById('statMembers').textContent = s.members;
-      if (document.getElementById('latestUpdate')) document.getElementById('latestUpdate').textContent = `อัปเดตล่าสุด ${latestUpdate()}`;
       if (document.getElementById('footerMonth')) document.getElementById('footerMonth').textContent = `อัปเดตข้อมูล: ${formatMonth(state.activeMonth)}`;
     }
 
@@ -910,6 +966,7 @@
     }
 
     function escapeHtml(str){
+      if(!str) return '';
       return str.replace(/[&<>"']/g, ch => ({
         '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
       }[ch]));
@@ -924,7 +981,7 @@
       document.getElementById('searchInput').value = state.searchTerm;
     }
 
-    // === Event Listeners หลัก ===
+    // === Event Listeners ===
     document.getElementById('monthSelect').addEventListener('change', (e) => {
       state.activeMonth = e.target.value;
       renderAll();
@@ -953,7 +1010,6 @@
 
     // === ระบบ Modal เพิ่ม/แก้ไขข้อมูล ===
     const formModal = document.getElementById('formModal');
-    const openAddModalBtn = document.getElementById('openAddModalBtn');
     const dataForm = document.getElementById('dataForm');
     const formType = document.getElementById('formType');
     const hoursField = document.getElementById('hoursField');
@@ -963,7 +1019,7 @@
     
     let editTargetId = null;
 
-    function openAddModal() {
+    window.openAddModal = function() {
       editTargetId = null;
       modalTitle.innerText = 'เพิ่มข้อมูลใหม่';
       document.getElementById('formDate').valueAsDate = new Date();
@@ -977,6 +1033,7 @@
       
       hoursField.style.display = 'block';
       document.getElementById('formHours').value = '2';
+      document.getElementById('formTask').value = '';
       
       formModal.classList.add('active');
     }
@@ -988,7 +1045,6 @@
 
       modalTitle.innerText = 'แก้ไขข้อมูล';
       
-      // แปลงวันที่ DD/MM/YYYY เป็น YYYY-MM-DD
       const parts = item.date.split('/');
       document.getElementById('formDate').value = `${parts[2]}-${parts[1]}-${parts[0]}`;
       
@@ -996,7 +1052,6 @@
       formNameSelect.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
       formNameSelect.innerHTML += `<option value="NEW_NAME">+ เพิ่มชื่อพนักงานใหม่</option>`;
       
-      // ถ้าชื่อไม่มีในตัวเลือก ให้โชว์ช่องกรอกชื่อใหม่
       if(names.includes(item.name)) {
           formNameSelect.value = item.name;
           formNewNameInput.style.display = 'none';
@@ -1028,11 +1083,11 @@
       editTargetId = null;
     }
 
-    if (openAddModalBtn) openAddModalBtn.addEventListener('click', openAddModal);
+    document.getElementById('openAddModalBtn').addEventListener('click', window.openAddModal);
     
     if (formModal) {
       formModal.addEventListener('click', (e) => {
-        if (e.target === formModal) closeFormModal();
+        if (e.target === formModal) window.closeFormModal();
       });
     }
 
@@ -1059,10 +1114,20 @@
       });
     }
 
-    // บันทึกฟอร์ม (ทั้งสร้างใหม่และแก้ไข)
+    // บันทึกฟอร์มลง Cloud
     if (dataForm) {
-      dataForm.addEventListener('submit', (e) => {
+      dataForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!currentUser) {
+            showToast('กำลังเชื่อมต่อฐานข้อมูล กรุณารอสักครู่', 'error');
+            return;
+        }
+
+        const btnSubmit = e.target.querySelector('.btn-submit');
+        const originalText = btnSubmit.innerHTML;
+        btnSubmit.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> กำลังบันทึก...';
+        btnSubmit.disabled = true;
+        lucide.createIcons();
         
         const dateVal = document.getElementById('formDate').value;
         const [year, month, day] = dateVal.split('-');
@@ -1081,39 +1146,32 @@
         }
 
         const taskVal = document.getElementById('formTask').value.trim();
+        const idStr = String(editTargetId !== null ? editTargetId : Date.now());
 
-        if (editTargetId !== null) {
-          // อัปเดตข้อมูลเดิม
-          const index = appData.findIndex(i => i.id === editTargetId);
-          if (index !== -1) {
-            appData[index] = { 
-              ...appData[index], 
-              date: formattedDate, 
-              name: finalName, 
-              hours: typeVal === 'OT' ? hoursVal : 0, 
-              task: taskVal, 
-              type: typeVal 
-            };
-          }
-          showToast('แก้ไขข้อมูลสำเร็จเรียบร้อย!', 'success');
-        } else {
-          // เพิ่มข้อมูลใหม่
-          const newItem = {
-            id: Date.now(),
-            date: formattedDate,
-            name: finalName,
-            hours: typeVal === 'OT' ? hoursVal : 0,
-            task: taskVal,
-            type: typeVal
-          };
-          appData.push(newItem);
-          showToast('บันทึกข้อมูลใหม่สำเร็จเรียบร้อย!', 'success');
+        const newItem = {
+          id: Number(idStr),
+          date: formattedDate,
+          name: finalName,
+          hours: typeVal === 'OT' ? hoursVal : 0,
+          task: taskVal,
+          type: typeVal
+        };
+
+        try {
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'ot_records', idStr);
+            await setDoc(docRef, newItem);
+            
+            state.activeMonth = `${month}/${year}`;
+            window.closeFormModal();
+            showToast(editTargetId !== null ? 'แก้ไขข้อมูลสำเร็จ!' : 'บันทึกข้อมูลใหม่สำเร็จ!', 'success');
+        } catch(err) {
+            console.error(err);
+            showToast('เกิดข้อผิดพลาดในการบันทึก', 'error');
+        } finally {
+            btnSubmit.innerHTML = originalText;
+            btnSubmit.disabled = false;
+            lucide.createIcons();
         }
-
-        saveDataToStorage();
-        state.activeMonth = `${month}/${year}`; // สลับไปดูเดือนที่เพิ่งเพิ่ม/แก้ไขข้อมูล
-        renderAll();
-        closeFormModal();
       });
     }
 
@@ -1131,19 +1189,33 @@
       deleteModal.classList.remove('active');
     }
 
-    document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-      if (deleteTargetId !== null) {
-        appData = appData.filter(item => item.id !== deleteTargetId);
-        saveDataToStorage();
-        renderAll();
-        closeDeleteModal();
-        showToast('ลบข้อมูลสำเร็จ', 'success');
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async (e) => {
+      if (deleteTargetId !== null && currentUser) {
+        const btn = e.currentTarget;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> กำลังลบ...';
+        btn.disabled = true;
+        lucide.createIcons();
+
+        try {
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'ot_records', String(deleteTargetId));
+            await deleteDoc(docRef);
+            window.closeDeleteModal();
+            showToast('ลบข้อมูลสำเร็จ', 'success');
+        } catch(err) {
+            console.error(err);
+            showToast('เกิดข้อผิดพลาดในการลบ', 'error');
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
+        }
       }
     });
 
     if (deleteModal) {
       deleteModal.addEventListener('click', (e) => {
-        if (e.target === deleteModal) closeDeleteModal();
+        if (e.target === deleteModal) window.closeDeleteModal();
       });
     }
 
@@ -1169,9 +1241,6 @@
         setTimeout(() => toast.remove(), 400);
       }, 3000);
     }
-
-    // Start App
-    renderAll();
   </script>
 </body>
 </html>
