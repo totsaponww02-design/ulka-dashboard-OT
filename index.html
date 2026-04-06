@@ -24,10 +24,12 @@
       --text-light: #94a3b8;
       --primary: #2563eb;
       --primary-bg: #eff6ff;
+      --primary-hover: #1d4ed8;
       --success: #059669;
       --success-bg: #ecfdf5;
       --warning: #d97706;
       --warning-bg: #fffbeb;
+      --danger: #ef4444;
       --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.04);
       --shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
       --radius-card: 24px;
@@ -96,7 +98,6 @@
     .btn:hover { transform: translateY(-2px); }
     .btn-share { background: #fff; color: #0f172a; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
     
-    /* New Add Button */
     .btn-add {
       background: linear-gradient(135deg, #38bdf8, #2563eb);
       color: #fff; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
@@ -159,7 +160,7 @@
       background: #fff; border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     }
     
-    /* === Member List (Cute Card Style) === */
+    /* === Member List === */
     .member-list { display: flex; flex-direction: column; gap: 4px; }
     .member-btn {
       border: none; background: transparent; padding: 12px 16px; border-radius: var(--radius-btn);
@@ -196,11 +197,12 @@
     /* === Table/List === */
     .list-card { overflow: hidden; padding: 4px; }
     .table-head {
-      display: grid; grid-template-columns: 3.5fr 1.5fr 5fr; gap: 20px; align-items: center;
+      display: grid; grid-template-columns: 2.8fr 1.5fr 6fr 80px; gap: 16px; align-items: center;
       padding: 16px 24px 12px; font-size: 13px; font-weight: 600; color: var(--text-muted);
       border-bottom: 1px solid var(--border); margin-bottom: 8px;
     }
     .col-status { text-align: center; }
+    .col-action { text-align: right; }
 
     .item { 
       padding: 16px 20px; margin: 0 8px 8px; border-radius: var(--radius-btn); 
@@ -208,11 +210,10 @@
     }
     .item:hover { background: #f8fafc; border-color: #e2e8f0; }
     
-    .item-grid { display: grid; grid-template-columns: 3.5fr 1.5fr 5fr; gap: 20px; align-items: center; }
+    .item-grid { display: grid; grid-template-columns: 2.8fr 1.5fr 6fr 80px; gap: 16px; align-items: center; }
     
     .person { display: flex; gap: 14px; align-items: center; min-width: 0; }
     
-    /* Avatar Badge */
     .avatar {
       padding: 0 16px; min-width: 85px; height: 40px; 
       border-radius: var(--radius-pill); display: inline-flex; align-items: center; justify-content: center;
@@ -234,7 +235,17 @@
     .badge-status.warning { background: #fff7ed; color: #b45309; }
     
     .task-col { min-width: 0; }
-    .task { font-size: 15px; line-height: 1.6; color: var(--text-main); font-weight: 400; }
+    .task { font-size: 15px; line-height: 1.6; color: var(--text-main); font-weight: 400; word-break: break-word; }
+
+    /* Action Buttons (Edit / Delete) */
+    .action-col { display: flex; justify-content: flex-end; gap: 4px; }
+    .btn-icon {
+      background: transparent; border: none; color: var(--text-light);
+      cursor: pointer; padding: 8px; border-radius: 8px; transition: 0.2s;
+      display: grid; place-items: center;
+    }
+    .btn-icon:hover { background: #f1f5f9; color: var(--primary); }
+    .btn-icon.delete:hover { background: #fee2e2; color: var(--danger); }
     
     /* Empty State */
     .empty { padding: 60px 20px; text-align: center; color: var(--text-muted); }
@@ -257,7 +268,7 @@
     .grad-top { background: linear-gradient(135deg, #818cf8, #4f46e5); }
     .grad-default { background: linear-gradient(135deg, #94a3b8, #475569); }
 
-    /* === Modal (Add Data) === */
+    /* === Modals === */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px);
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px;
@@ -329,21 +340,33 @@
       
       .table-head { display: none; }
       
-      .item { padding: 16px; border: 1px solid var(--border); margin-bottom: 12px; }
-      .item-grid { grid-template-columns: 1fr auto; gap: 12px; align-items: flex-start; }
-      .person { gap: 12px; }
+      .item { position: relative; padding: 16px; border: 1px solid var(--border); margin-bottom: 12px; }
+      .item-grid { 
+        display: grid; 
+        grid-template-columns: 1fr auto; 
+        grid-template-areas: 
+          "person actions"
+          "status status"
+          "task task";
+        gap: 12px; 
+        align-items: center; 
+      }
+      
+      .person { grid-area: person; gap: 12px; }
       .avatar { min-width: 75px; height: 34px; font-size: 13px; padding: 0 12px; }
       .date { font-size: 13px; }
       
-      .status { justify-content: flex-end; }
+      .status { grid-area: status; justify-content: flex-start; }
       .badge-status { padding: 6px 12px; font-size: 12px; }
       
-      .task-col { grid-column: 1 / -1; width: 100%; margin-top: 4px; }
+      .task-col { grid-area: task; width: 100%; margin-top: 4px; }
       .task { 
         background: #f8fafc; padding: 14px; 
         border-radius: var(--radius-btn); 
         border: 1px solid var(--border); font-size: 14px;
       }
+
+      .action-col { grid-area: actions; justify-content: flex-end; }
       
       .modal-card { max-width: 100%; height: auto; border-radius: 20px; }
       .toast-container { bottom: 16px; right: 16px; left: 16px; }
@@ -435,6 +458,7 @@
             <div class="col-person">วันที่ / พนักงาน</div>
             <div class="col-status">สถานะ</div>
             <div class="col-task">รายละเอียดงาน</div>
+            <div class="col-action"></div>
           </div>
           
           <div class="items" id="items"></div>
@@ -454,14 +478,14 @@
     </section>
   </main>
 
-  <!-- === Add Data Modal === -->
-  <div id="addModal" class="modal-overlay">
+  <!-- === Form Modal (Add / Edit) === -->
+  <div id="formModal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h2>เพิ่มข้อมูลใหม่</h2>
-        <button class="modal-close" id="closeModalBtn"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
+        <h2 id="modalTitle">เพิ่มข้อมูลใหม่</h2>
+        <button class="modal-close" onclick="closeFormModal()"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
       </div>
-      <form id="addDataForm">
+      <form id="dataForm">
         <div class="modal-body">
           <div class="field">
             <label class="label" for="formDate">วันที่</label>
@@ -493,10 +517,28 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-cancel" id="cancelModalBtn">ยกเลิก</button>
+          <button type="button" class="btn btn-cancel" onclick="closeFormModal()">ยกเลิก</button>
           <button type="submit" class="btn btn-submit"><i data-lucide="save" style="width:16px;height:16px;"></i> บันทึกข้อมูล</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- === Delete Confirm Modal === -->
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 400px;">
+      <div class="modal-header">
+        <h2>ยืนยันการลบ</h2>
+        <button class="modal-close" onclick="closeDeleteModal()"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
+      </div>
+      <div class="modal-body" style="padding-bottom: 12px;">
+        <p style="margin:0; font-size: 15px; color: var(--text-main);">คุณต้องการลบรายการนี้ใช่หรือไม่?</p>
+        <p style="margin:4px 0 0 0; font-size: 13px; color: var(--danger);">* หากลบแล้วจะไม่สามารถกู้คืนได้</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" onclick="closeDeleteModal()">ยกเลิก</button>
+        <button type="button" class="btn btn-submit" style="background:var(--danger);box-shadow:none;" id="confirmDeleteBtn"><i data-lucide="trash-2" style="width:16px;height:16px;"></i> ลบข้อมูล</button>
+      </div>
     </div>
   </div>
 
@@ -844,6 +886,10 @@
             <div class="task-col">
               <div class="task">${escapeHtml(item.task)}</div>
             </div>
+            <div class="action-col">
+              <button class="btn-icon" onclick="openEditModal(${item.id})" title="แก้ไข"><i data-lucide="pencil"></i></button>
+              <button class="btn-icon delete" onclick="openDeleteModal(${item.id})" title="ลบข้อมูล"><i data-lucide="trash-2"></i></button>
+            </div>
           </div>
         </div>
       `}).join('');
@@ -893,22 +939,23 @@
       }
     });
 
-    // === ระบบ Modal เพิ่มข้อมูล ===
-    const addModal = document.getElementById('addModal');
+    // === ระบบ Modal เพิ่ม/แก้ไขข้อมูล ===
+    const formModal = document.getElementById('formModal');
     const openAddModalBtn = document.getElementById('openAddModalBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const cancelModalBtn = document.getElementById('cancelModalBtn');
-    const addDataForm = document.getElementById('addDataForm');
+    const dataForm = document.getElementById('dataForm');
     const formType = document.getElementById('formType');
     const hoursField = document.getElementById('hoursField');
     const formNameSelect = document.getElementById('formName');
     const formNewNameInput = document.getElementById('formNewName');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    let editTargetId = null;
 
-    function openModal() {
-      // เซ็ตวันที่ปัจจุบันเป็นค่าเริ่มต้น
+    function openAddModal() {
+      editTargetId = null;
+      modalTitle.innerText = 'เพิ่มข้อมูลใหม่';
       document.getElementById('formDate').valueAsDate = new Date();
       
-      // ดึงรายชื่อทั้งหมดมาใส่ใน Dropdown
       const names = getUniqueNames('All').filter(n => n !== 'All');
       formNameSelect.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
       formNameSelect.innerHTML += `<option value="NEW_NAME">+ เพิ่มชื่อพนักงานใหม่</option>`;
@@ -916,27 +963,67 @@
       formNewNameInput.style.display = 'none';
       formNewNameInput.removeAttribute('required');
       
-      addModal.classList.add('active');
-    }
-
-    function closeModal() {
-      addModal.classList.remove('active');
-      addDataForm.reset();
       hoursField.style.display = 'block';
+      document.getElementById('formHours').value = '2';
+      
+      formModal.classList.add('active');
     }
 
-    if (openAddModalBtn) openAddModalBtn.addEventListener('click', openModal);
-    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-    if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
+    window.openEditModal = function(id) {
+      editTargetId = id;
+      const item = appData.find(i => i.id === id);
+      if(!item) return;
+
+      modalTitle.innerText = 'แก้ไขข้อมูล';
+      
+      // แปลงวันที่ DD/MM/YYYY เป็น YYYY-MM-DD
+      const parts = item.date.split('/');
+      document.getElementById('formDate').value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+      
+      const names = getUniqueNames('All').filter(n => n !== 'All');
+      formNameSelect.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
+      formNameSelect.innerHTML += `<option value="NEW_NAME">+ เพิ่มชื่อพนักงานใหม่</option>`;
+      
+      // ถ้าชื่อไม่มีในตัวเลือก ให้โชว์ช่องกรอกชื่อใหม่
+      if(names.includes(item.name)) {
+          formNameSelect.value = item.name;
+          formNewNameInput.style.display = 'none';
+          formNewNameInput.removeAttribute('required');
+      } else {
+          formNameSelect.value = 'NEW_NAME';
+          formNewNameInput.style.display = 'block';
+          formNewNameInput.value = item.name;
+          formNewNameInput.setAttribute('required', 'true');
+      }
+
+      formType.value = item.type;
+      if (item.type === 'Leave') {
+        hoursField.style.display = 'none';
+        document.getElementById('formHours').value = '0';
+      } else {
+        hoursField.style.display = 'block';
+        document.getElementById('formHours').value = item.hours;
+      }
+      
+      document.getElementById('formTask').value = item.task;
+      
+      formModal.classList.add('active');
+    }
+
+    window.closeFormModal = function() {
+      formModal.classList.remove('active');
+      dataForm.reset();
+      editTargetId = null;
+    }
+
+    if (openAddModalBtn) openAddModalBtn.addEventListener('click', openAddModal);
     
-    // ปิดเมื่อคลิกพื้นหลัง
-    if (addModal) {
-      addModal.addEventListener('click', (e) => {
-        if (e.target === addModal) closeModal();
+    if (formModal) {
+      formModal.addEventListener('click', (e) => {
+        if (e.target === formModal) closeFormModal();
       });
     }
 
-    // จัดการ Dropdown ชื่อพนักงาน
     if (formNameSelect) {
       formNameSelect.addEventListener('change', (e) => {
         if (e.target.value === 'NEW_NAME') {
@@ -948,7 +1035,6 @@
       });
     }
 
-    // ซ่อน/แสดง ช่องกรอกชั่วโมงเมื่อเลือกประเภท
     if (formType) {
       formType.addEventListener('change', (e) => {
         if (e.target.value === 'Leave') {
@@ -961,12 +1047,12 @@
       });
     }
 
-    // บันทึกฟอร์ม
-    if (addDataForm) {
-      addDataForm.addEventListener('submit', (e) => {
+    // บันทึกฟอร์ม (ทั้งสร้างใหม่และแก้ไข)
+    if (dataForm) {
+      dataForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const dateVal = document.getElementById('formDate').value; // yyyy-mm-dd
+        const dateVal = document.getElementById('formDate').value;
         const [year, month, day] = dateVal.split('-');
         const formattedDate = `${day}/${month}/${year}`;
         
@@ -978,30 +1064,74 @@
         const typeVal = formType.value;
         let hoursVal = document.getElementById('formHours').value.trim();
         
-        // แปลงเป็นตัวเลข ถ้าไม่ใช่ตัวหนังสือ
         if (!isNaN(hoursVal) && hoursVal !== '') {
           hoursVal = parseFloat(hoursVal);
         }
 
         const taskVal = document.getElementById('formTask').value.trim();
 
-        const newItem = {
-          id: Date.now(), // ใช้ timestamp เป็น ID ไม่ซ้ำ
-          date: formattedDate,
-          name: finalName,
-          hours: typeVal === 'OT' ? hoursVal : 0,
-          task: taskVal,
-          type: typeVal
-        };
+        if (editTargetId !== null) {
+          // อัปเดตข้อมูลเดิม
+          const index = appData.findIndex(i => i.id === editTargetId);
+          if (index !== -1) {
+            appData[index] = { 
+              ...appData[index], 
+              date: formattedDate, 
+              name: finalName, 
+              hours: typeVal === 'OT' ? hoursVal : 0, 
+              task: taskVal, 
+              type: typeVal 
+            };
+          }
+          showToast('แก้ไขข้อมูลสำเร็จเรียบร้อย!', 'success');
+        } else {
+          // เพิ่มข้อมูลใหม่
+          const newItem = {
+            id: Date.now(),
+            date: formattedDate,
+            name: finalName,
+            hours: typeVal === 'OT' ? hoursVal : 0,
+            task: taskVal,
+            type: typeVal
+          };
+          appData.push(newItem);
+          showToast('บันทึกข้อมูลใหม่สำเร็จเรียบร้อย!', 'success');
+        }
 
-        appData.push(newItem);
-        saveDataToStorage(); // เซฟลงเครื่อง
-        
-        // อัปเดตหน้าจอ
-        state.activeMonth = 'All'; // กลับไปหน้าแรกให้เห็นข้อมูลล่าสุด
+        saveDataToStorage();
+        state.activeMonth = 'All';
         renderAll();
-        closeModal();
-        showToast('บันทึกข้อมูลสำเร็จเรียบร้อย!', 'success');
+        closeFormModal();
+      });
+    }
+
+    // === ระบบ Modal ยืนยันการลบ ===
+    let deleteTargetId = null;
+    const deleteModal = document.getElementById('deleteModal');
+    
+    window.openDeleteModal = function(id) {
+      deleteTargetId = id;
+      deleteModal.classList.add('active');
+    }
+    
+    window.closeDeleteModal = function() {
+      deleteTargetId = null;
+      deleteModal.classList.remove('active');
+    }
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+      if (deleteTargetId !== null) {
+        appData = appData.filter(item => item.id !== deleteTargetId);
+        saveDataToStorage();
+        renderAll();
+        closeDeleteModal();
+        showToast('ลบข้อมูลสำเร็จ', 'success');
+      }
+    });
+
+    if (deleteModal) {
+      deleteModal.addEventListener('click', (e) => {
+        if (e.target === deleteModal) closeDeleteModal();
       });
     }
 
@@ -1021,10 +1151,7 @@
       container.appendChild(toast);
       lucide.createIcons();
 
-      // Animate In
       setTimeout(() => toast.classList.add('show'), 10);
-
-      // Animate Out & Remove
       setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 400);
