@@ -18,7 +18,8 @@
     :root {
       --bg: #f4f7fb;
       --card: #ffffff;
-      --border: #f1f5f9;
+      --border: #e2e8f0;
+      --border-light: #f1f5f9;
       --text-main: #1e293b;
       --text-muted: #64748b;
       --text-light: #94a3b8;
@@ -30,6 +31,7 @@
       --warning: #d97706;
       --warning-bg: #fffbeb;
       --danger: #ef4444;
+      --danger-bg: #fef2f2;
       --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.04);
       --shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
       --radius-card: 24px;
@@ -49,7 +51,6 @@
 
     .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
     
-    /* Hide Scrollbar for Horizontal scrolling */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -93,23 +94,22 @@
     .btn {
       border: none; cursor: pointer; border-radius: var(--radius-pill); padding: 10px 18px;
       font-weight: 600; font-size: 14px; transition: all .2s ease;
-      display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
+      display: inline-flex; align-items: center; gap: 8px; font-family: inherit; justify-content: center;
     }
     .btn:hover { transform: translateY(-2px); }
     .btn-share { background: #fff; color: #0f172a; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
     
     .btn-add {
       background: linear-gradient(135deg, #38bdf8, #2563eb);
-      color: #fff; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); border: 1px solid rgba(255,255,255,0.2);
     }
     .btn-add:hover { box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
 
-    .update-pill {
-      padding: 10px 16px; border-radius: var(--radius-pill);
-      background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,.1);
-      color: #e2e8f0; font-size: 13px; font-weight: 500; backdrop-filter: blur(8px);
+    .btn-dark {
+      background: #1e293b; color: #fff; border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
+    .btn-dark:hover { background: #0f172a; box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
 
     /* === Main Content === */
     main { margin-top: -45px; padding-bottom: 48px; position: relative; z-index: 10; }
@@ -148,17 +148,18 @@
     .section-title i { width: 18px; height: 18px; }
     
     /* Form Elements */
-    .field { margin-bottom: 16px; }
-    .label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; color: var(--text-muted); }
+    .field { margin-bottom: 20px; }
+    .label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: var(--text-main); }
     .input, .select, .textarea {
-      width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-btn);
-      background: #f8fafc; font-size: 14px; color: var(--text-main); outline: none;
+      width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 12px;
+      background: #ffffff; font-size: 15px; color: var(--text-main); outline: none;
       font-family: inherit; transition: all 0.2s; font-weight: 500;
     }
-    .textarea { resize: vertical; min-height: 80px; }
+    .textarea { resize: vertical; min-height: 100px; }
     .input:focus, .select:focus, .textarea:focus {
-      background: #fff; border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
+    .input::placeholder, .textarea::placeholder { color: #94a3b8; font-weight: 400; }
     
     /* === Member List === */
     .member-list { display: flex; flex-direction: column; gap: 4px; }
@@ -173,13 +174,8 @@
     .member-btn:hover { background-color: #f8fafc; color: var(--text-main); }
     .member-btn:hover .dot { background-color: #94a3b8; }
     
-    .member-btn.active {
-      background-color: var(--primary-bg); color: var(--primary); font-weight: 600;
-    }
-    .member-btn.active .dot { 
-      background-color: var(--primary); 
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); 
-    }
+    .member-btn.active { background-color: var(--primary-bg); color: var(--primary); font-weight: 600; }
+    .member-btn.active .dot { background-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
     /* === Tabs === */
     .tabs { display: flex; gap: 12px; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 24px; padding-bottom: 4px; }
@@ -199,7 +195,7 @@
     .table-head {
       display: grid; grid-template-columns: 2.8fr 1.5fr 6fr 80px; gap: 16px; align-items: center;
       padding: 16px 24px 12px; font-size: 13px; font-weight: 600; color: var(--text-muted);
-      border-bottom: 1px solid var(--border); margin-bottom: 8px;
+      border-bottom: 1px solid var(--border-light); margin-bottom: 8px;
     }
     .col-status { text-align: center; }
     .col-action { text-align: right; }
@@ -247,7 +243,6 @@
     .btn-icon:hover { background: #f1f5f9; color: var(--primary); }
     .btn-icon.delete:hover { background: #fee2e2; color: var(--danger); }
     
-    /* Empty State */
     .empty { padding: 60px 20px; text-align: center; color: var(--text-muted); }
     .empty i { width: 44px; height: 44px; color: #cbd5e1; margin: 0 auto 16px; opacity: 0.7; }
     .empty .big { font-size: 16px; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
@@ -268,9 +263,9 @@
     .grad-top { background: linear-gradient(135deg, #818cf8, #4f46e5); }
     .grad-default { background: linear-gradient(135deg, #94a3b8, #475569); }
 
-    /* === Modals === */
+    /* === Modals Generic === */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px);
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px);
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px;
       opacity: 0; visibility: hidden; transition: all 0.3s ease;
     }
@@ -285,47 +280,75 @@
     .modal-overlay.active .modal-card { transform: translateY(0); }
     
     .modal-header {
-      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      padding: 24px 32px 20px; border-bottom: 1px solid var(--border-light);
       display: flex; justify-content: space-between; align-items: center;
     }
-    .modal-header h2 { margin: 0; font-size: 18px; font-weight: 700; color: var(--text-main); }
+    .modal-header h2 { margin: 0; font-size: 20px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+    .modal-header h2 i { color: var(--text-main); }
     .modal-close {
-      background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%;
-      display: grid; place-items: center; cursor: pointer; color: var(--text-muted); transition: 0.2s;
+      background: transparent; border: none; width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center; cursor: pointer; color: var(--text-muted); transition: 0.2s; margin: -8px -8px -8px 0;
     }
-    .modal-close:hover { background: #e2e8f0; color: var(--danger); }
+    .modal-close:hover { background: #f1f5f9; color: var(--text-main); }
     
-    .modal-body { padding: 24px; overflow-y: auto; max-height: calc(100vh - 150px); }
+    .modal-body { padding: 24px 32px; overflow-y: auto; max-height: calc(100vh - 180px); }
     
     .modal-footer {
-      padding: 16px 24px; border-top: 1px solid var(--border); background: #f8fafc;
-      display: flex; justify-content: flex-end; gap: 12px;
+      padding: 20px 32px; border-top: 1px solid var(--border-light); background: #ffffff;
+      display: flex; justify-content: flex-end; align-items: center; gap: 12px;
     }
-    .btn-cancel { background: #fff; border: 1px solid var(--border); color: var(--text-main); }
-    .btn-cancel:hover { background: #f1f5f9; }
-    .btn-submit { background: var(--primary); color: #fff; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
-    .btn-submit:hover { background: var(--primary-hover); }
+    .btn-cancel { background: transparent; border: 1px solid transparent; color: var(--text-muted); font-weight: 600; padding: 10px 16px; transition: 0.2s; }
+    .btn-cancel:hover { background: #f1f5f9; color: var(--text-main); border-radius: var(--radius-pill); }
+    .btn-submit { background: var(--primary); color: #fff; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25); border-radius: 999px; padding: 12px 28px; font-weight: 600; transition: 0.2s; }
+    .btn-submit:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35); }
 
-    /* === Toast Notification === */
-    .toast-container {
-      position: fixed; bottom: 24px; right: 24px; z-index: 1100;
-      display: flex; flex-direction: column; gap: 10px;
+    /* === Employee Manage Modal (Large) === */
+    .modal-lg { max-width: 900px; max-height: 90vh; }
+    .emp-modal-grid { display: grid; grid-template-columns: 1fr 1.2fr; height: 100%; }
+    .emp-list-col { background: #ffffff; border-right: 1px solid var(--border-light); display: flex; flex-direction: column; }
+    .emp-form-col { background: #f8fafc; display: flex; flex-direction: column; }
+    
+    .emp-section-head { padding: 24px 32px 16px; font-size: 16px; font-weight: 800; color: var(--text-main); border-bottom: 1px solid var(--border-light); }
+    
+    .emp-list { padding: 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+    .emp-card {
+      border: 1px solid var(--border); border-radius: 16px; padding: 16px; background: #fff;
+      display: flex; justify-content: space-between; align-items: flex-start; transition: 0.2s;
     }
+    .emp-card:hover { border-color: #cbd5e1; box-shadow: var(--shadow-sm); }
+    .emp-info h4 { margin: 0 0 4px; font-size: 16px; font-weight: 700; color: var(--text-main); display:flex; align-items:center; gap:8px;}
+    .emp-info p { margin: 0 0 6px; font-size: 13px; color: var(--text-muted); }
+    .sat-badges { display: flex; gap: 6px; }
+    .sat-badge { background: #f1f5f9; color: #64748b; font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 600; }
+    .badge-resign { background: var(--danger-bg); color: var(--danger); font-size: 11px; padding: 4px 8px; border-radius: 6px; font-weight: 700; }
+    
+    .emp-form-inner { padding: 24px 32px; overflow-y: auto; flex: 1; }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    
+    .sat-selector { display: flex; gap: 8px; }
+    .sat-toggle {
+      width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border);
+      background: #fff; color: var(--text-muted); font-weight: 700; font-size: 15px;
+      display: grid; place-items: center; cursor: pointer; transition: 0.2s;
+    }
+    .sat-toggle.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
+
+    /* === Toast === */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1100; display: flex; flex-direction: column; gap: 10px; }
     .toast {
-      background: #fff; border-left: 4px solid var(--success); border-radius: 12px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); padding: 14px 20px;
+      background: #1e293b; color: #fff; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2); padding: 16px 24px;
       display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px;
       transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .toast.show { transform: translateX(0); }
-    .toast i { color: var(--success); }
+    .toast i { color: #34d399; }
 
     /* === RESPONSIVE === */
     @media (max-width: 1024px){
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
       .layout { grid-template-columns: 1fr; }
       .member-list { flex-direction: row; overflow-x: auto; padding-bottom: 8px; gap: 8px; }
-      .member-btn { padding: 10px 16px; background: #f8fafc; white-space: nowrap; flex-shrink: 0; }
+      .member-btn { padding: 10px 16px; background: #fff; border: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; }
       .member-btn .dot { display: none; }
       .member-btn.active { background: var(--primary-bg); border-color: #bfdbfe; color: var(--primary); }
     }
@@ -342,33 +365,24 @@
       
       .item { position: relative; padding: 16px; border: 1px solid var(--border); margin-bottom: 12px; }
       .item-grid { 
-        display: grid; 
-        grid-template-columns: 1fr auto; 
-        grid-template-areas: 
-          "person actions"
-          "status status"
-          "task task";
-        gap: 12px; 
-        align-items: center; 
+        display: grid; grid-template-columns: 1fr auto; 
+        grid-template-areas: "person actions" "status status" "task task";
+        gap: 12px; align-items: center; 
       }
-      
       .person { grid-area: person; gap: 12px; }
       .avatar { min-width: 75px; height: 34px; font-size: 13px; padding: 0 12px; }
       .date { font-size: 13px; }
-      
       .status { grid-area: status; justify-content: flex-start; }
       .badge-status { padding: 6px 12px; font-size: 12px; }
-      
       .task-col { grid-area: task; width: 100%; margin-top: 4px; }
-      .task { 
-        background: #f8fafc; padding: 14px; 
-        border-radius: var(--radius-btn); 
-        border: 1px solid var(--border); font-size: 14px;
-      }
-
+      .task { background: #f8fafc; padding: 14px; border-radius: var(--radius-btn); border: 1px solid var(--border); font-size: 14px; }
       .action-col { grid-area: actions; justify-content: flex-end; }
       
-      .modal-card { max-width: 100%; height: auto; border-radius: 20px; }
+      .modal-card { max-width: 100%; height: 95vh; border-radius: 24px 24px 0 0; transform: translateY(100%); margin-top: auto;}
+      .emp-modal-grid { grid-template-columns: 1fr; display: flex; flex-direction: column; }
+      .emp-list-col { border-right: none; border-bottom: 1px solid var(--border-light); flex: none; max-height: 40vh;}
+      .emp-form-col { flex: 1; }
+      .form-grid-2 { grid-template-columns: 1fr; gap: 16px; }
       .toast-container { bottom: 16px; right: 16px; left: 16px; }
       .toast { justify-content: center; }
     }
@@ -384,8 +398,9 @@
           <p class="header-sub">ตรวจสอบชั่วโมง OT รายละเอียดงาน และประวัติการลาย้อนหลังแบบเรียลไทม์</p>
         </div>
         <div class="header-actions">
-          <button class="btn btn-add" id="openAddModalBtn"><i data-lucide="plus-circle" style="width:16px;height:16px;"></i> เพิ่มข้อมูล</button>
-          <button class="btn btn-share" id="copyBtn"><i data-lucide="link" style="width:16px;height:16px;"></i> แชร์ลิงก์</button>
+          <button class="btn btn-dark" onclick="openEmpModal()"><i data-lucide="users-cog"></i> จัดการพนักงาน</button>
+          <button class="btn btn-add" onclick="openAddModal()"><i data-lucide="plus-circle"></i> เพิ่มข้อมูล OT</button>
+          <button class="btn btn-share" id="copyBtn"><i data-lucide="link"></i> แชร์ลิงก์</button>
         </div>
       </div>
     </div>
@@ -478,12 +493,12 @@
     </section>
   </main>
 
-  <!-- === Form Modal (Add / Edit) === -->
+  <!-- === Form Modal (Add / Edit OT) === -->
   <div id="formModal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 id="modalTitle">เพิ่มข้อมูลใหม่</h2>
-        <button class="modal-close" onclick="closeFormModal()"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
+        <h2 id="modalTitle"><i data-lucide="file-plus"></i> เพิ่มข้อมูล OT</h2>
+        <button class="modal-close" onclick="closeFormModal()"><i data-lucide="x"></i></button>
       </div>
       <form id="dataForm">
         <div class="modal-body">
@@ -493,12 +508,9 @@
           </div>
           <div class="field">
             <label class="label" for="formName">ชื่อพนักงาน</label>
-            <div style="display: flex; gap: 8px;">
-                <select id="formName" class="select" required style="flex: 1;">
-                    <!-- Options populated by JS -->
-                </select>
-                <input type="text" id="formNewName" class="input" placeholder="พิมพ์ชื่อใหม่..." style="display: none; flex: 1;" />
-            </div>
+            <select id="formName" class="select" required>
+                <!-- Options populated by JS from employeesData -->
+            </select>
           </div>
           <div class="field">
             <label class="label" for="formType">ประเภทรายการ</label>
@@ -513,14 +525,55 @@
           </div>
           <div class="field" style="margin-bottom:0;">
             <label class="label" for="formTask">รายละเอียดงาน / เหตุผลการลา</label>
-            <textarea id="formTask" class="textarea" placeholder="ระบุรายละเอียด..." required></textarea>
+            <textarea id="formTask" class="textarea" placeholder="ระบุรายละเอียดงานที่ทำ..." required></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-cancel" onclick="closeFormModal()">ยกเลิก</button>
-          <button type="submit" class="btn btn-submit"><i data-lucide="save" style="width:16px;height:16px;"></i> บันทึกข้อมูล</button>
+          <button type="submit" class="btn btn-submit">บันทึกข้อมูล</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- === Employee Management Modal === -->
+  <div id="empModal" class="modal-overlay">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h2><i data-lucide="users-cog"></i> จัดการข้อมูลพนักงาน</h2>
+        <button class="modal-close" onclick="closeEmpModal()"><i data-lucide="x"></i></button>
+      </div>
+      <div class="emp-modal-grid">
+        <!-- Left: List -->
+        <div class="emp-list-col">
+          <div class="emp-section-head">รายชื่อทั้งหมด (<span id="empCount">0</span>)</div>
+          <div class="emp-list hide-scrollbar" id="empListContainer">
+            <!-- Cards injected via JS -->
+          </div>
+        </div>
+        <!-- Right: Form -->
+        <div class="emp-form-col">
+          <div class="emp-section-head" id="empFormTitle">เพิ่มพนักงานใหม่</div>
+          <form id="empForm" class="emp-form-inner flex flex-col h-full">
+            <div class="flex-1">
+                <input type="hidden" id="empId" />
+                <div class="field">
+                  <label class="label" for="empName">ชื่อพนักงาน *</label>
+                  <input type="text" id="empName" class="input" placeholder="ระบุชื่อพนักงาน" required />
+                </div>
+                <div class="field" style="margin-bottom: 0;">
+                  <label class="label" style="color:var(--danger)">วันที่ลาออก (ถ้ามี)</label>
+                  <input type="date" id="empResignDate" class="input" />
+                  <p style="font-size: 12px; color: var(--text-light); margin: 6px 0 0;">หากระบุวันที่ลาออก ระบบจะซ่อนจากเมนูเพิ่ม OT อัตโนมัติ</p>
+                </div>
+            </div>
+            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-light); display: flex; gap: 12px;">
+                <button type="button" class="btn btn-cancel flex-1" style="display:none;" id="empCancelEditBtn" onclick="resetEmpForm()">ยกเลิกการแก้ไข</button>
+                <button type="submit" class="btn btn-submit flex-1" id="empSubmitBtn">เพิ่มพนักงานใหม่</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -529,7 +582,7 @@
     <div class="modal-card" style="max-width: 400px;">
       <div class="modal-header">
         <h2>ยืนยันการลบ</h2>
-        <button class="modal-close" onclick="closeDeleteModal()"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
+        <button class="modal-close" onclick="closeDeleteModal()"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body" style="padding-bottom: 12px;">
         <p style="margin:0; font-size: 15px; color: var(--text-main);">คุณต้องการลบรายการนี้ใช่หรือไม่?</p>
@@ -549,7 +602,24 @@
     // Initialize Lucide Icons
     lucide.createIcons();
 
-    // ข้อมูลตั้งต้น
+    // === ข้อมูลพนักงาน (Employee Data) ===
+    const defaultEmployees = [
+        { id: 1, name: 'แบงค์', resignDate: '' },
+        { id: 2, name: 'นักรบ', resignDate: '' },
+        { id: 3, name: 'อามิน', resignDate: '' },
+        { id: 4, name: 'น้องกาย', resignDate: '' },
+        { id: 5, name: 'พี่แมน', resignDate: '' },
+        { id: 6, name: 'น้องบอม', resignDate: '2026-03-17' },
+        { id: 7, name: 'พี่ท็อป', resignDate: '2026-03-01' }
+    ];
+
+    let employeesData = JSON.parse(localStorage.getItem('employeesData_v1'));
+    if (!employeesData || employeesData.length === 0) {
+        employeesData = [...defaultEmployees];
+        localStorage.setItem('employeesData_v1', JSON.stringify(employeesData));
+    }
+
+    // === ข้อมูล OT (OT Data) ===
     const initialData = [
       { id: 1, date: '03/02/2026', name: 'แบงค์', hours: 3, task: 'เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้ + ประชุมแผนงาน', type: 'OT' },
       { id: 2, date: '03/02/2026', name: 'นักรบ', hours: 2, task: 'Y1974 + เตรียมพื้นที่สำหรับลงสินค้าพรุ่งนี้', type: 'OT' },
@@ -680,20 +750,10 @@
       { id: 127, date: '04/04/2026', name: 'อามิน', hours: 'พิเศษ', task: 'โอทีพิเศษ วันเสาร์', type: 'OT' }
     ];
 
-    // === ระบบโหลดและจัดเก็บข้อมูลด้วย LocalStorage ===
     let appData = [...initialData];
     const savedData = localStorage.getItem('otDashboardData_v1');
     if (savedData) {
       appData = JSON.parse(savedData);
-      
-      // อัปเดตข้อมูลเก่าในเครื่องที่มีชื่อ Armin ให้กลายเป็น อามิน
-      appData = appData.map(item => {
-        if (item.name === 'Armin') {
-          return { ...item, name: 'อามิน' };
-        }
-        return item;
-      });
-      saveDataToStorage(); // บันทึกข้อมูลที่ถูกแปลงชื่อแล้วกลับลงเครื่อง
     }
     
     function saveDataToStorage() {
@@ -705,7 +765,6 @@
       '07':'กรกฎาคม','08':'สิงหาคม','09':'กันยายน','10':'ตุลาคม','11':'พฤศจิกายน','12':'ธันวาคม'
     };
 
-    // หาเดือนปัจจุบัน หรือ เดือนล่าสุดที่มีข้อมูล เพื่อใช้เป็นค่าเริ่มต้น
     const todayDate = new Date();
     const currentMonthStr = String(todayDate.getMonth() + 1).padStart(2, '0') + '/' + todayDate.getFullYear();
     const availableMonthsTemp = Array.from(new Set(appData.map(item => item.date.substring(3)))).sort((a,b) => {
@@ -714,7 +773,6 @@
         if (yA !== yB) return yB - yA;
         return mB - mA;
     });
-    
     const defaultMonth = availableMonthsTemp.includes(currentMonthStr) ? currentMonthStr : (availableMonthsTemp[0] || 'All');
 
     const state = {
@@ -724,45 +782,16 @@
       activeMonth: defaultMonth
     };
 
+    // Helper functions
     function parseDate(date){
       const [day, month, year] = date.split('/').map(Number);
       return new Date(year, month - 1, day);
     }
-
     function formatMonth(monthStr){
       if(monthStr === 'All') return 'ทุกเดือน';
       const [m, y] = monthStr.split('/');
       return `${monthNamesTh[m]} ${y}`;
     }
-
-    function getUniqueMonths(){
-      const months = Array.from(new Set(appData.map(item => {
-        const [, m, y] = item.date.split('/');
-        return `${m}/${y}`;
-      })));
-      months.sort((a,b) => {
-        const [mA,yA] = a.split('/').map(Number);
-        const [mB,yB] = b.split('/').map(Number);
-        if (yA !== yB) return yB - yA;
-        return mB - mA;
-      });
-      return ['All', ...months];
-    }
-
-    function getUniqueNames(activeMonth){
-      let names = ['All', ...Array.from(new Set(appData.map(item => item.name)))];
-      if (activeMonth !== 'All') {
-        const [m, y] = activeMonth.split('/').map(Number);
-        if (y > 2026 || (y === 2026 && m >= 3)) {
-          names = names.filter(n => n !== 'พี่ท็อป');
-        }
-        if (y > 2026 || (y === 2026 && m >= 4)) {
-          names = names.filter(n => n !== 'น้องบอม');
-        }
-      }
-      return names;
-    }
-
     function getGradClass(name){
       switch(name){
         case 'แบงค์': return 'grad-bank';
@@ -775,49 +804,15 @@
         default: return 'grad-default';
       }
     }
-
-    function filteredData(){
-      return appData
-        .filter(item => {
-          const matchesName = state.filterName === 'All' || item.name === state.filterName;
-          const s = state.searchTerm.toLowerCase();
-          const matchesSearch =
-            item.task.toLowerCase().includes(s) ||
-            item.date.includes(state.searchTerm) ||
-            item.name.toLowerCase().includes(s);
-
-          let matchesTab = true;
-          const isOt = item.type === 'OT';
-          if (state.activeTab === 'ot') matchesTab = isOt;
-          if (state.activeTab === 'leave') matchesTab = !isOt;
-
-          const matchesMonth = state.activeMonth === 'All' || item.date.endsWith(state.activeMonth);
-          return matchesName && matchesSearch && matchesTab && matchesMonth;
-        })
-        .sort((a,b) => parseDate(b.date) - parseDate(a.date));
+    function escapeHtml(str){
+      if(!str) return '';
+      return str.replace(/[&<>"']/g, ch => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[ch]));
     }
 
-    function stats(){
-      const base = appData.filter(item => {
-        const matchesName = state.filterName === 'All' || item.name === state.filterName;
-        const matchesMonth = state.activeMonth === 'All' || item.date.endsWith(state.activeMonth);
-        return matchesName && matchesMonth;
-      });
-      return {
-        totalHours: base.reduce((sum, item) => sum + (Number(item.hours) || 0), 0),
-        otCount: base.filter(i => i.type === 'OT').length,
-        leaveCount: base.filter(i => i.type !== 'OT').length,
-        members: new Set(base.map(i => i.name)).size,
-      };
-    }
-
-    function latestUpdate(){
-      return [...appData].sort((a,b) => parseDate(b.date) - parseDate(a.date))[0]?.date || '-';
-    }
-
+    // === Render Functions ===
     function renderMonths(){
       const select = document.getElementById('monthSelect');
-      const months = getUniqueMonths();
+      const months = ['All', ...availableMonthsTemp];
       if (!months.includes(state.activeMonth) && state.activeMonth !== 'All') {
         state.activeMonth = months[1] || 'All';
       }
@@ -825,72 +820,96 @@
       select.value = state.activeMonth;
     }
 
-    function renderMembers(){
+    function renderMembersSidebar(){
       const wrap = document.getElementById('memberList');
-      const names = getUniqueNames(state.activeMonth);
-      if (!names.includes(state.filterName)) state.filterName = 'All';
-      wrap.innerHTML = names.map(name => {
+      // กรองชื่อเฉพาะคนที่มีข้อมูลในเดือนที่เลือก และยังไม่ลาออก (หรือลาออกในเดือนนั้น)
+      let activeNames = employeesData.filter(emp => !emp.resignDate || new Date(emp.resignDate) > parseDate(`01/${state.activeMonth === 'All' ? currentMonthStr : state.activeMonth}`)).map(e => e.name);
+      
+      // ดึงชื่อที่มีข้อมูลจริงในระบบมาเสริม เผื่อคนลาออกไปแล้วแต่ยังมีข้อมูลให้ดู
+      const dataNames = Array.from(new Set(appData.map(item => {
+          if (state.activeMonth === 'All' || item.date.endsWith(state.activeMonth)) return item.name;
+          return null;
+      }).filter(Boolean)));
+
+      const namesToDisplay = Array.from(new Set([...activeNames, ...dataNames]));
+      
+      if (!namesToDisplay.includes(state.filterName) && state.filterName !== 'All') state.filterName = 'All';
+      
+      wrap.innerHTML = `<button class="member-btn ${state.filterName === 'All' ? 'active' : ''}" data-name="All"><span class="dot"></span> แสดงทั้งหมด</button>`;
+      wrap.innerHTML += namesToDisplay.map(name => {
         const isActive = state.filterName === name;
-        return `
-        <button class="member-btn ${isActive ? 'active' : ''}" data-name="${name}">
-          <span class="dot"></span> ${name === 'All' ? 'แสดงทั้งหมด' : name}
-        </button>
-      `}).join('');
+        return `<button class="member-btn ${isActive ? 'active' : ''}" data-name="${name}"><span class="dot"></span> ${name}</button>`;
+      }).join('');
       
       wrap.querySelectorAll('[data-name]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          state.filterName = btn.dataset.name;
-          renderAll();
-        });
+        btn.addEventListener('click', () => { state.filterName = btn.dataset.name; renderAll(); });
       });
     }
 
     function renderTabs(){
       document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.remove('active-all','active-ot','active-leave');
-        if (tab.dataset.tab === state.activeTab) {
-          tab.classList.add(`active-${state.activeTab}`);
-        }
+        if (tab.dataset.tab === state.activeTab) tab.classList.add(`active-${state.activeTab}`);
       });
     }
 
     function renderStats(){
-      const s = stats();
+      const base = appData.filter(item => {
+        const matchesName = state.filterName === 'All' || item.name === state.filterName;
+        const matchesMonth = state.activeMonth === 'All' || item.date.endsWith(state.activeMonth);
+        return matchesName && matchesMonth;
+      });
+      const s = {
+        totalHours: base.reduce((sum, item) => sum + (Number(item.hours) || 0), 0),
+        otCount: base.filter(i => i.type === 'OT').length,
+        leaveCount: base.filter(i => i.type !== 'OT').length,
+        members: new Set(base.map(i => i.name)).size,
+      };
+      
       if (document.getElementById('statHours')) document.getElementById('statHours').textContent = s.totalHours;
       if (document.getElementById('statOt')) document.getElementById('statOt').textContent = s.otCount;
       if (document.getElementById('statLeave')) document.getElementById('statLeave').textContent = s.leaveCount;
       if (document.getElementById('statMembers')) document.getElementById('statMembers').textContent = s.members;
-      if (document.getElementById('latestUpdate')) document.getElementById('latestUpdate').textContent = `อัปเดตล่าสุด ${latestUpdate()}`;
+      
+      const lastRec = [...appData].sort((a,b) => parseDate(b.date) - parseDate(a.date))[0];
+      if (document.getElementById('latestUpdate')) document.getElementById('latestUpdate').textContent = `อัปเดตล่าสุด ${lastRec ? lastRec.date : '-'}`;
       if (document.getElementById('footerMonth')) document.getElementById('footerMonth').textContent = `อัปเดตข้อมูล: ${formatMonth(state.activeMonth)}`;
     }
 
     function renderItems(){
-      const list = filteredData();
-      const items = document.getElementById('items');
-      const empty = document.getElementById('empty');
+      const itemsContainer = document.getElementById('items');
+      const emptyContainer = document.getElementById('empty');
+      
+      const list = appData.filter(item => {
+          const matchesName = state.filterName === 'All' || item.name === state.filterName;
+          const s = state.searchTerm.toLowerCase();
+          const matchesSearch = item.task.toLowerCase().includes(s) || item.date.includes(state.searchTerm) || item.name.toLowerCase().includes(s);
+          let matchesTab = true;
+          if (state.activeTab === 'ot') matchesTab = item.type === 'OT';
+          if (state.activeTab === 'leave') matchesTab = item.type !== 'OT';
+          const matchesMonth = state.activeMonth === 'All' || item.date.endsWith(state.activeMonth);
+          return matchesName && matchesSearch && matchesTab && matchesMonth;
+        }).sort((a,b) => parseDate(b.date) - parseDate(a.date));
+
       if (!list.length){
-        items.innerHTML = '';
-        empty.style.display = 'block';
+        itemsContainer.innerHTML = '';
+        emptyContainer.style.display = 'block';
         lucide.createIcons();
         return;
       }
-      empty.style.display = 'none';
-      items.innerHTML = list.map(item => {
-        
+      emptyContainer.style.display = 'none';
+      itemsContainer.innerHTML = list.map(item => {
         let badgeHtml = '';
         if (item.type === 'OT') {
             const displayHrs = (isNaN(item.hours) || item.hours === '') ? item.hours : `${item.hours} ชม.`;
             badgeHtml = `<span class="badge-status ot">${displayHrs}</span>`;
         } else {
-            let text = 'ลา / หยุด';
-            let statusClass = 'leave';
-            
+            let text = 'ลา / หยุด'; let statusClass = 'leave';
             if (item.task.includes('เข้างานสาย')) { text = 'มาสาย'; statusClass = 'warning'; }
             else if (item.task.includes('ขาดงาน')) { text = 'ขาดงาน'; statusClass = 'warning'; }
             else if (item.task.includes('ลาออก')) { text = 'ลาออก'; }
             else if (item.task.includes('ลาป่วย')) { text = 'ลาป่วย'; }
             else if (item.task.includes('ลากิจ')) { text = 'ลากิจ'; }
-            
             badgeHtml = `<span class="badge-status ${statusClass}">${text}</span>`;
         }
 
@@ -901,12 +920,8 @@
               <div class="avatar ${getGradClass(item.name)}">${item.name}</div>
               <div class="date"><i data-lucide="calendar"></i> ${item.date}</div>
             </div>
-            <div class="status">
-              ${badgeHtml}
-            </div>
-            <div class="task-col">
-              <div class="task">${escapeHtml(item.task)}</div>
-            </div>
+            <div class="status">${badgeHtml}</div>
+            <div class="task-col"><div class="task">${escapeHtml(item.task)}</div></div>
             <div class="action-col">
               <button class="btn-icon" onclick="openEditModal(${item.id})" title="แก้ไข"><i data-lucide="pencil"></i></button>
               <button class="btn-icon delete" onclick="openDeleteModal(${item.id})" title="ลบข้อมูล"><i data-lucide="trash-2"></i></button>
@@ -914,82 +929,142 @@
           </div>
         </div>
       `}).join('');
-      
       lucide.createIcons();
-    }
-
-    function escapeHtml(str){
-      if(!str) return '';
-      return str.replace(/[&<>"']/g, ch => ({
-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-      }[ch]));
     }
 
     function renderAll(){
       renderMonths();
-      renderMembers();
+      renderMembersSidebar();
       renderTabs();
       renderStats();
       renderItems();
       document.getElementById('searchInput').value = state.searchTerm;
     }
 
-    // === Event Listeners หลัก ===
-    document.getElementById('monthSelect').addEventListener('change', (e) => {
-      state.activeMonth = e.target.value;
-      renderAll();
-    });
-
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-      state.searchTerm = e.target.value;
-      renderAll();
-    });
-
+    // === Event Listeners for Filters ===
+    document.getElementById('monthSelect').addEventListener('change', (e) => { state.activeMonth = e.target.value; renderAll(); });
+    document.getElementById('searchInput').addEventListener('input', (e) => { state.searchTerm = e.target.value; renderAll(); });
     document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        state.activeTab = tab.dataset.tab;
-        renderAll();
-      });
+      tab.addEventListener('click', () => { state.activeTab = tab.dataset.tab; renderAll(); });
     });
-
     document.getElementById('copyBtn').addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        showToast('คัดลอกลิงก์สำหรับแชร์แล้ว', 'success');
-      } catch (e) {
-        alert('คัดลอกลิงก์ไม่สำเร็จ กรุณาคัดลอกจากแถบ URL');
-      }
+      try { await navigator.clipboard.writeText(window.location.href); showToast('คัดลอกลิงก์สำหรับแชร์แล้ว', 'success'); } 
+      catch (e) { alert('คัดลอกลิงก์ไม่สำเร็จ กรุณาคัดลอกจากแถบ URL'); }
     });
 
-    // === ระบบ Modal เพิ่ม/แก้ไขข้อมูล ===
+
+    // === EMPLOYEE MANAGEMENT SYSTEM ===
+    const empModal = document.getElementById('empModal');
+    let editingEmpId = null;
+    let selectedSaturdays = [];
+
+    window.openEmpModal = function() {
+        renderEmployeeCards();
+        resetEmpForm();
+        empModal.classList.add('active');
+    }
+    window.closeEmpModal = function() {
+        empModal.classList.remove('active');
+    }
+
+    function renderEmployeeCards() {
+        const container = document.getElementById('empListContainer');
+        document.getElementById('empCount').innerText = employeesData.length;
+        
+        container.innerHTML = employeesData.map(emp => {
+            let resignBadge = emp.resignDate 
+                ? `<span class="badge-resign">ลาออกแล้ว (${emp.resignDate})</span>` 
+                : '';
+
+            return `
+            <div class="emp-card">
+                <div class="emp-info">
+                    <h4>${emp.name} ${resignBadge}</h4>
+                </div>
+                <button class="btn-icon" onclick="editEmployee(${emp.id})" title="แก้ไขข้อมูลพนักงาน"><i data-lucide="pencil" style="width:16px;height:16px;"></i></button>
+            </div>
+            `;
+        }).join('');
+        lucide.createIcons();
+    }
+
+    function resetEmpForm() {
+        editingEmpId = null;
+        document.getElementById('empFormTitle').innerText = 'เพิ่มพนักงานใหม่';
+        document.getElementById('empName').value = '';
+        document.getElementById('empResignDate').value = '';
+        document.getElementById('empSubmitBtn').innerText = 'เพิ่มพนักงานใหม่';
+        document.getElementById('empCancelEditBtn').style.display = 'none';
+    }
+
+    window.editEmployee = function(id) {
+        const emp = employeesData.find(e => e.id === id);
+        if(!emp) return;
+        
+        editingEmpId = id;
+        document.getElementById('empFormTitle').innerText = 'แก้ไขข้อมูลพนักงาน';
+        document.getElementById('empName').value = emp.name;
+        document.getElementById('empResignDate').value = emp.resignDate || '';
+        document.getElementById('empSubmitBtn').innerText = 'บันทึกการแก้ไข';
+        document.getElementById('empCancelEditBtn').style.display = 'block';
+        
+        // Scroll to top of form on mobile
+        if(window.innerWidth <= 768) {
+            document.querySelector('.emp-form-inner').scrollTop = 0;
+        }
+    }
+
+    document.getElementById('empForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const newEmp = {
+            id: editingEmpId || Date.now(),
+            name: document.getElementById('empName').value.trim(),
+            resignDate: document.getElementById('empResignDate').value
+        };
+
+        if (editingEmpId) {
+            const index = employeesData.findIndex(e => e.id === editingEmpId);
+            if(index !== -1) {
+                // อัปเดตเฉพาะชื่อและวันที่ลาออก
+                employeesData[index] = { ...employeesData[index], name: newEmp.name, resignDate: newEmp.resignDate };
+            }
+            showToast('แก้ไขข้อมูลพนักงานสำเร็จ', 'success');
+        } else {
+            employeesData.push(newEmp);
+            showToast('เพิ่มพนักงานใหม่สำเร็จ', 'success');
+        }
+
+        localStorage.setItem('employeesData_v1', JSON.stringify(employeesData));
+        renderEmployeeCards();
+        renderAll(); // Update sidebar and dropdowns
+        resetEmpForm();
+    });
+
+
+    // === ระบบ Modal เพิ่ม/แก้ไขข้อมูล OT ===
     const formModal = document.getElementById('formModal');
-    const openAddModalBtn = document.getElementById('openAddModalBtn');
     const dataForm = document.getElementById('dataForm');
-    const formType = document.getElementById('formType');
-    const hoursField = document.getElementById('hoursField');
     const formNameSelect = document.getElementById('formName');
-    const formNewNameInput = document.getElementById('formNewName');
-    const modalTitle = document.getElementById('modalTitle');
-    
     let editTargetId = null;
+
+    function populateOtNameDropdown() {
+        // เฉพาะพนักงานที่ยังไม่ลาออก
+        const activeEmps = employeesData.filter(emp => !emp.resignDate);
+        formNameSelect.innerHTML = activeEmps.map(emp => `<option value="${emp.name}">${emp.name}</option>`).join('');
+        if(activeEmps.length === 0) formNameSelect.innerHTML = `<option value="">-- กรุณาเพิ่มพนักงานก่อน --</option>`;
+    }
 
     window.openAddModal = function() {
       editTargetId = null;
-      modalTitle.innerText = 'เพิ่มข้อมูลใหม่';
+      document.getElementById('modalTitle').innerHTML = '<i data-lucide="file-plus"></i> เพิ่มข้อมูล OT';
       document.getElementById('formDate').valueAsDate = new Date();
-      
-      const names = getUniqueNames('All').filter(n => n !== 'All');
-      formNameSelect.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
-      formNameSelect.innerHTML += `<option value="NEW_NAME">+ เพิ่มชื่อพนักงานใหม่</option>`;
-      
-      formNewNameInput.style.display = 'none';
-      formNewNameInput.removeAttribute('required');
-      
-      hoursField.style.display = 'block';
+      populateOtNameDropdown();
+      document.getElementById('hoursField').style.display = 'block';
       document.getElementById('formHours').value = '2';
       document.getElementById('formTask').value = '';
-      
       formModal.classList.add('active');
+      lucide.createIcons();
     }
 
     window.openEditModal = function(id) {
@@ -997,188 +1072,95 @@
       const item = appData.find(i => i.id === id);
       if(!item) return;
 
-      modalTitle.innerText = 'แก้ไขข้อมูล';
-      
-      // แปลงวันที่ DD/MM/YYYY เป็น YYYY-MM-DD
+      document.getElementById('modalTitle').innerHTML = '<i data-lucide="edit"></i> แก้ไขข้อมูล';
       const parts = item.date.split('/');
       document.getElementById('formDate').value = `${parts[2]}-${parts[1]}-${parts[0]}`;
       
-      const names = getUniqueNames('All').filter(n => n !== 'All');
-      formNameSelect.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
-      formNameSelect.innerHTML += `<option value="NEW_NAME">+ เพิ่มชื่อพนักงานใหม่</option>`;
-      
-      // ถ้าชื่อไม่มีในตัวเลือก ให้โชว์ช่องกรอกชื่อใหม่
-      if(names.includes(item.name)) {
-          formNameSelect.value = item.name;
-          formNewNameInput.style.display = 'none';
-          formNewNameInput.removeAttribute('required');
-      } else {
-          formNameSelect.value = 'NEW_NAME';
-          formNewNameInput.style.display = 'block';
-          formNewNameInput.value = item.name;
-          formNewNameInput.setAttribute('required', 'true');
+      populateOtNameDropdown();
+      // ถ้าชื่อคนนี้ถูกซ่อนไปแล้ว (ลาออก) แต่ยังต้องแก้ข้อมูลเก่า ให้แอบเพิ่ม option เข้าไปให้เลือกได้
+      if(!Array.from(formNameSelect.options).some(opt => opt.value === item.name)) {
+          formNameSelect.innerHTML += `<option value="${item.name}">${item.name} (ลาออก)</option>`;
       }
+      formNameSelect.value = item.name;
 
-      formType.value = item.type;
+      document.getElementById('formType').value = item.type;
       if (item.type === 'Leave') {
-        hoursField.style.display = 'none';
+        document.getElementById('hoursField').style.display = 'none';
         document.getElementById('formHours').value = '0';
       } else {
-        hoursField.style.display = 'block';
+        document.getElementById('hoursField').style.display = 'block';
         document.getElementById('formHours').value = item.hours;
       }
-      
       document.getElementById('formTask').value = item.task;
-      
       formModal.classList.add('active');
+      lucide.createIcons();
     }
 
-    window.closeFormModal = function() {
-      formModal.classList.remove('active');
-      dataForm.reset();
-      editTargetId = null;
-    }
+    window.closeFormModal = function() { formModal.classList.remove('active'); dataForm.reset(); editTargetId = null; }
 
-    if (openAddModalBtn) openAddModalBtn.addEventListener('click', openAddModal);
-    
-    if (formModal) {
-      formModal.addEventListener('click', (e) => {
-        if (e.target === formModal) closeFormModal();
-      });
-    }
+    document.getElementById('formType').addEventListener('change', (e) => {
+      if (e.target.value === 'Leave') {
+        document.getElementById('hoursField').style.display = 'none';
+        document.getElementById('formHours').value = '0';
+      } else {
+        document.getElementById('hoursField').style.display = 'block';
+        document.getElementById('formHours').value = '2';
+      }
+    });
 
-    if (formNameSelect) {
-      formNameSelect.addEventListener('change', (e) => {
-        if (e.target.value === 'NEW_NAME') {
-          formNameSelect.style.display = 'none';
-          formNewNameInput.style.display = 'block';
-          formNewNameInput.setAttribute('required', 'true');
-          formNewNameInput.focus();
+    dataForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const dateVal = document.getElementById('formDate').value;
+      const [year, month, day] = dateVal.split('-');
+      const formattedDate = `${day}/${month}/${year}`;
+      const finalName = formNameSelect.value;
+      if(!finalName) { showToast('กรุณาเพิ่มพนักงานก่อนบันทึก OT', 'error'); return; }
+
+      const typeVal = document.getElementById('formType').value;
+      let hoursVal = document.getElementById('formHours').value.trim();
+      if (!isNaN(hoursVal) && hoursVal !== '') hoursVal = parseFloat(hoursVal);
+      const taskVal = document.getElementById('formTask').value.trim();
+
+      if (editTargetId !== null) {
+        const index = appData.findIndex(i => i.id === editTargetId);
+        if (index !== -1) {
+          appData[index] = { ...appData[index], date: formattedDate, name: finalName, hours: typeVal === 'OT' ? hoursVal : 0, task: taskVal, type: typeVal };
         }
-      });
-    }
-
-    if (formType) {
-      formType.addEventListener('change', (e) => {
-        if (e.target.value === 'Leave') {
-          hoursField.style.display = 'none';
-          document.getElementById('formHours').value = '0';
-        } else {
-          hoursField.style.display = 'block';
-          document.getElementById('formHours').value = '2';
-        }
-      });
-    }
-
-    // บันทึกฟอร์ม (ทั้งสร้างใหม่และแก้ไข)
-    if (dataForm) {
-      dataForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const dateVal = document.getElementById('formDate').value;
-        const [year, month, day] = dateVal.split('-');
-        const formattedDate = `${day}/${month}/${year}`;
-        
-        let finalName = formNameSelect.value;
-        if (finalName === 'NEW_NAME') {
-          finalName = formNewNameInput.value.trim();
-        }
-
-        const typeVal = formType.value;
-        let hoursVal = document.getElementById('formHours').value.trim();
-        
-        if (!isNaN(hoursVal) && hoursVal !== '') {
-          hoursVal = parseFloat(hoursVal);
-        }
-
-        const taskVal = document.getElementById('formTask').value.trim();
-
-        if (editTargetId !== null) {
-          // อัปเดตข้อมูลเดิม
-          const index = appData.findIndex(i => i.id === editTargetId);
-          if (index !== -1) {
-            appData[index] = { 
-              ...appData[index], 
-              date: formattedDate, 
-              name: finalName, 
-              hours: typeVal === 'OT' ? hoursVal : 0, 
-              task: taskVal, 
-              type: typeVal 
-            };
-          }
-          showToast('แก้ไขข้อมูลสำเร็จเรียบร้อย!', 'success');
-        } else {
-          // เพิ่มข้อมูลใหม่
-          const newItem = {
-            id: Date.now(),
-            date: formattedDate,
-            name: finalName,
-            hours: typeVal === 'OT' ? hoursVal : 0,
-            task: taskVal,
-            type: typeVal
-          };
-          appData.push(newItem);
-          showToast('บันทึกข้อมูลใหม่สำเร็จเรียบร้อย!', 'success');
-        }
-
-        saveDataToStorage();
-        state.activeMonth = `${month}/${year}`; // สลับไปดูเดือนที่เพิ่งเพิ่ม/แก้ไขข้อมูล
-        renderAll();
-        closeFormModal();
-      });
-    }
+        showToast('แก้ไขข้อมูลสำเร็จเรียบร้อย!', 'success');
+      } else {
+        appData.push({ id: Date.now(), date: formattedDate, name: finalName, hours: typeVal === 'OT' ? hoursVal : 0, task: taskVal, type: typeVal });
+        showToast('บันทึกข้อมูลใหม่สำเร็จเรียบร้อย!', 'success');
+      }
+      saveDataToStorage();
+      state.activeMonth = `${month}/${year}`;
+      renderAll();
+      closeFormModal();
+    });
 
     // === ระบบ Modal ยืนยันการลบ ===
     let deleteTargetId = null;
     const deleteModal = document.getElementById('deleteModal');
-    
-    window.openDeleteModal = function(id) {
-      deleteTargetId = id;
-      deleteModal.classList.add('active');
-    }
-    
-    window.closeDeleteModal = function() {
-      deleteTargetId = null;
-      deleteModal.classList.remove('active');
-    }
+    window.openDeleteModal = function(id) { deleteTargetId = id; deleteModal.classList.add('active'); }
+    window.closeDeleteModal = function() { deleteTargetId = null; deleteModal.classList.remove('active'); }
 
     document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
       if (deleteTargetId !== null) {
         appData = appData.filter(item => item.id !== deleteTargetId);
-        saveDataToStorage();
-        renderAll();
-        closeDeleteModal();
-        showToast('ลบข้อมูลสำเร็จ', 'success');
+        saveDataToStorage(); renderAll(); closeDeleteModal(); showToast('ลบข้อมูลสำเร็จ', 'success');
       }
     });
-
-    if (deleteModal) {
-      deleteModal.addEventListener('click', (e) => {
-        if (e.target === deleteModal) closeDeleteModal();
-      });
-    }
 
     // === ระบบแจ้งเตือน Toast ===
     function showToast(message, type = 'success') {
       const container = document.getElementById('toastContainer');
       if(!container) return;
-      
       const toast = document.createElement('div');
       toast.className = 'toast';
-      
-      const icon = type === 'success' 
-        ? '<i data-lucide="check-circle"></i>' 
-        : '<i data-lucide="info"></i>';
-        
-      toast.innerHTML = `${icon} <span>${message}</span>`;
+      toast.innerHTML = `${type === 'success' ? '<i data-lucide="check-circle"></i>' : '<i data-lucide="info"></i>'} <span>${message}</span>`;
       container.appendChild(toast);
       lucide.createIcons();
-
       setTimeout(() => toast.classList.add('show'), 10);
-      setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 400);
-      }, 3000);
+      setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3000);
     }
 
     // Start App
